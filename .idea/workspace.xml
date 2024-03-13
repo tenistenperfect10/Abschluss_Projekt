@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a5a0352-c1fc-4577-97bb-f6fe21fc8e10" name="Changes" comment="Merge remote-tracking branch 'origin/main'">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/MongoDBConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/MongoDBConnectionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Member_Impl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Member_Impl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/properties/keywords.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/properties/keywords.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project_06_04.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Project_06_04.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +62,11 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Subversion&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\liuhe\IdeaProjects\parliament_browser_6_4\src\main\resources" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.SyncDBTask">
     <configuration name="DownloadTask" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.texttechnology.parliament_browser_6_4.task.DownloadTask" />
@@ -136,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1710329623912</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Merge remote-tracking branch 'origin/main'">
+      <created>1710332071795</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710332071795</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
