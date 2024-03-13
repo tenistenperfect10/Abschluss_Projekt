@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class SyncDBTask {
 
-    private static MongoCollection<Document> abgeordnter = MongoDBUtils.getCollection("Abgeordnter");
+    private static MongoCollection<Document> abgeordnter = MongoDBUtils.getCollection("Abgeordneter");
 
     private static void unzipFile() {
         String zipFilePath = "src/main/resources/MdB-Stammdaten.zip";

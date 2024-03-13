@@ -152,13 +152,13 @@ public class Member_Impl implements Member {
     public String toString() {
         return "Member{" +
                 "id='" + id + '\'' +
-                ", nachName='" + nachName + '\'' +
-                ", vorName='" + vorName + '\'' +
+                ", nachname='" + nachName + '\'' +
+                ", vorname='" + vorName + '\'' +
                 ", ortszusatz='" + ortszusatz + '\'' +
-                ", anredeTitle='" + anredeTitle + '\'' +
-                ", akadTitle='" + akadTitle + '\'' +
-                ", historieVon='" + historieVon + '\'' +
-                ", historieBis='" + historieBis + '\'' +
+                ", anredetitle='" + anredeTitle + '\'' +
+                ", akadtitle='" + akadTitle + '\'' +
+                ", historievon='" + historieVon + '\'' +
+                ", historiebis='" + historieBis + '\'' +
                 ", memberImgList=" + memberImgList +
                 '}';
     }
