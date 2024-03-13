@@ -85,7 +85,7 @@
             text-overflow: ellipsis;
             overflow: hidden;
             cursor: pointer;
-            user-select: none;
+            userImpl-select: none;
             font-weight: bold;
         }
         .pdl20 {

@@ -253,7 +253,7 @@
     <input type="text" name="party" id="party" value="" placeholder="Search by Party" />
     <input type="submit" value="Search" />
 </form>
-<#if canEdit?exists && canEdit == 1><button class="button" onclick="showModal('add user')">add speaker</button></#if>
+<#if canEdit?exists && canEdit == 1><button class="button" onclick="showModal('add userImpl')">add speaker</button></#if>
 
 <table>
     <tr>

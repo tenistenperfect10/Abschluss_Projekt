@@ -236,18 +236,18 @@
                 </thead>
                 <tbody>
                     <#if users?has_content>
-                        <#list users as user >
+                        <#list users as userImpl >
                             <tr>
-                                <td>${user["username"]}</td>
+                                <td>${userImpl["username"]}</td>
                                 <td>
-                                    <button class="btn btn-info" onclick="assignPermission('${user["username"]}')">
-                                        <#if user.canEdit?exists && user.canEdit == 1>
+                                    <button class="btn btn-info" onclick="assignPermission('${userImpl["username"]}')">
+                                        <#if userImpl.canEdit?exists && userImpl.canEdit == 1>
                                             Release editing permissions
                                         <#else>
                                             Assign editing permissions
                                         </#if>
                                     </button>
-                                    <button class="btn btn-danger" onclick="deleteUser('${user["username"]}')">Delete user</button>
+                                    <button class="btn btn-danger" onclick="deleteUser('${userImpl["username"]}')">Delete userImpl</button>
                                 </td>
                             </tr>
                         </#list>
