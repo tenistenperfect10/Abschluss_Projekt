@@ -34,13 +34,13 @@
 <Script>
     $(document).ready(function () {
         /**
-         * message对象的构造方法
+         * Constructor methods for message objects
          * @constructor
          */
         function MessageBox() {
             this.container = $('<div>', { id: 'message-container' });
 
-            // 初始化消息容器
+            // Initializing the Message Container
             this.initContainer = function () {
                 this.container.css({
                     position: 'fixed',
@@ -58,9 +58,9 @@
                 $('body').append(this.container);
             };
 
-            // 显示消息
+            // Show Message
             this.show = function (message, type) {
-                // 设置不同类型的样式
+                // Setting up different types of styles
                 if (type === 'error') {
                     this.container.css({
                         'background-color': '#f8d7da',
@@ -75,26 +75,26 @@
                     });
                 }
 
-                // 显示消息
+                // Show Message
                 this.container.text(message).fadeIn().delay(2000).fadeOut();
             };
 
-            // 显示错误消息
+            // Displaying Error Messages
             this.showError = function (message) {
                 this.show(message, 'error');
             };
 
-            // 显示成功消息
+            // Show success message
             this.showSuccess = function (message) {
                 this.show(message, 'success');
             };
 
-            // 调用初始化
+            // Call Initialization
             this.initContainer();
         }
 
         /**
-         * 全局挂载message对象
+         * Globally mount the message object
          */
         if (!window.messageBox) {
             window.messageBox = new MessageBox();

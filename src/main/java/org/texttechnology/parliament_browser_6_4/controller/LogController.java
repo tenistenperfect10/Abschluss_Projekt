@@ -1,5 +1,10 @@
 package org.texttechnology.parliament_browser_6_4.controller;
-
+/**
+ * The {@code LogController} class is responsible for handling log-related routes in the application.
+ * It defines the endpoint for retrieving logs and returning them in a JSON format. This controller
+ * utilizes a {@code LogDAO} for data access and a {@code Configuration} instance for any potential
+ * template rendering.
+ */
 
 import freemarker.template.Configuration;
 import org.bson.Document;
@@ -20,29 +25,49 @@ public class LogController {
     private final LogDAO logDAO;
     private final Configuration cfg;
 
+    /**
+     * Constructs a new {@code LogController} with specified {@code LogDAO} and {@code Configuration}.
+     * It initializes the routes for log-related requests.
+     *
+     * @param logDAO The data access object for logs.
+     * @param cfg The FreeMarker configuration for rendering templates.
+     * @throws IOException If an I/O error occurs during route initialization.
+     */
     public LogController(LogDAO logDAO, Configuration cfg)
             throws IOException {
         this.logDAO = logDAO;
         this.cfg = cfg;
         initializeRoutes();
     }
-
+    /**
+     * Initializes the web routes for log-related operations. Specifically, it sets up an endpoint
+     * for posting log data which returns the logs in a JSON format.
+     *
+     * @throws IOException If there is an error setting up the routes.
+     */
     private void initializeRoutes() throws IOException {
 
         post("/logs", (request, response) -> {
 
-            // 构建响应数据（这里使用一个简单的示例）
+            //  Build response data (using a simple example here)
             List<Document> logList = logDAO.getLogs();
 
-            // 设置响应头
+            // Set response header
             response.header("Content-Type", "application/json");
 
             String json = convertListToJson(logList);
-            // 返回响应数据
+            // Return response data
             return json;
         });
     }
-
+    /**
+     * Converts a list of {@code Document} objects to a JSON string. It ensures the preservation of
+     * insertion order of keys using {@code LinkedHashMap} and handles the conversion of {@code ObjectId}
+     * to a string format.
+     *
+     * @param documents The list of {@code Document} objects to convert.
+     * @return A JSON string representation of the documents list.
+     */
     private static String convertListToJson(List<Document> documents) {
         List<String> jsonDocuments = new ArrayList<>();
         Document firstDocument = documents.get(0);
@@ -54,14 +79,14 @@ public class LogController {
         }
 
         for (Document document : documents) {
-            // 使用 LinkedHashMap 保持键值对的插入顺序
+            // Use LinkedHashMap to maintain the order of key-value pairs
             Map<String, Object> orderedMap = new LinkedHashMap<>(document);
 
-            // 处理 _id 字段，将 ObjectId 转换为字符串形式
+            // Handle the _id field by converting ObjectId to its string representation
             ObjectId objectId = (ObjectId) orderedMap.get("_id");
             orderedMap.put("_id", objectId.toString());
 
-            // 将 Map 转换为 JSON 字符串
+            // Convert Map to JSON string
             String jsonDocument = new Document(orderedMap).toJson();
             jsonDocuments.add(jsonDocument);
         }
