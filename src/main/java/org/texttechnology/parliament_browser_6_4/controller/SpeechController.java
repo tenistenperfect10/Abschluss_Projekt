@@ -25,12 +25,24 @@ import java.util.*;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
-
+/**
+ * The {@code SpeechController} class manages routes related to speeches, including displaying speech details,
+ * searching for speeches, and handling speech updates. It utilizes {@link InsightFactory} for data access
+ * and {@link Configuration} for rendering templates.
+ */
 public class SpeechController {
 
     private final InsightFactory insightFactory;
     private final Configuration cfg;
 
+    /**
+     * Constructs a {@code SpeechController} with specified {@link InsightFactory} and {@link Configuration}.
+     * Initializes the web routes for speech-related operations.
+     *
+     * @param insightFactory The factory for accessing speech data.
+     * @param cfg The FreeMarker configuration for template rendering.
+     * @throws IOException If an I/O error occurs during route initialization.
+     */
     public SpeechController( InsightFactory insightFactory, Configuration cfg)
             throws IOException {
         this.insightFactory = insightFactory;
@@ -38,22 +50,28 @@ public class SpeechController {
         initializeRoutes();
     }
 
+    /**
+     * Initializes the routes for handling requests related to speeches. This includes displaying a list of speeches,
+     * speech details, searching for speeches based on criteria, and updating speech information.
+     *
+     * @throws IOException If an error occurs in setting up the routes or rendering templates.
+     */
     private void initializeRoutes() throws IOException {
         get("/speech", new FreemarkerBasedRoute("/speech", "speech.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
                     throws IOException, TemplateException {
                 SessionsUtils.redirectIfNotLogin(request, response);
-                // 构建聚合查询
+                // Building Aggregate Queries
                 AggregateIterable<Document> speechList = insightFactory.aggregate();
 
                 SimpleHash root = new SimpleHash();
 
-                // 将AggregateIterable转换为List
+                // Converting AggregateIterable to List
                 List<Document> resultList = new ArrayList<>();
                 speechList.into(resultList);
                 System.out.println("total speech num is " + resultList.size());
-                // 转化为级联的多级菜单形式
+                // Conversion to cascading multi-level menu forms
                 Map<String, Map<String, List<Document>>> resultMap = convertCascadeMap(resultList);
                 root.put("speechMap", resultMap);
 //                root.put("speechList", resultList);
@@ -87,10 +105,10 @@ public class SpeechController {
                 Date startDate = new Date(speech.get("starttime", Long.class));
                 Date endDate = new Date(speech.get("endtime", Long.class));
 
-                // 创建一个SimpleDateFormat对象，指定所需的格式
+                // Create a SimpleDateFormat object that specifies the desired formatting
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
-                // 使用format方法将Date对象转换为字符串
+                // Converting a Date object to a string using the format method
                 String formattedStartDate = sdf.format(startDate);
                 String formattedEndDate = sdf.format(endDate);
 
@@ -149,17 +167,17 @@ public class SpeechController {
 
                 AggregateIterable<Document> speechList = insightFactory.searchSpeech(startDate, endDate);
 
-                // 将AggregateIterable转换为List
+                // Converting AggregateIterable to List
                 List<Document> resultList = new ArrayList<>();
                 speechList.into(resultList);
                 System.out.println("search speech num is " + resultList.size());
-                // 转化为级联的多级菜单形式
+                // Conversion to cascading multi-level menu forms
                 Map<String, Map<String, List<Document>>> resultMap = convertCascadeMap(resultList);
 
-                // 创建一个SimpleDateFormat对象，指定所需的格式
+                // Create a SimpleDateFormat object that specifies the desired formatting
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
-                // 使用format方法将Date对象转换为字符串
+                // Converting a Date object to a string using the format method
                 String formattedStartDate = sdf.format(startDate);
                 String formattedEndDate = sdf.format(endDate);
 
@@ -203,10 +221,13 @@ public class SpeechController {
 
     }
 
+
     /**
-     * 转化为多级级联的map，用于折叠和展开显示
-     * @param resultList
-     * @return
+     * Transforms a list of {@link Document} objects into a nested map structure for hierarchical display.
+     * This is particularly useful for organizing speeches by speaker and title in a cascading manner.
+     *
+     * @param resultList The list of speech documents to organize.
+     * @return A map representing the hierarchical structure of speeches organized by speaker and title.
      */
     private Map<String, Map<String, List<Document>>> convertCascadeMap(List<Document> resultList) {
         Map<String, Map<String, List<Document>>> resultMap = new HashMap<>();

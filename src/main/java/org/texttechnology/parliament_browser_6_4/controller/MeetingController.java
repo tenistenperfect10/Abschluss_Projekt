@@ -17,11 +17,22 @@ import java.util.List;
 import static spark.Spark.get;
 
 public class MeetingController {
+    /**
+     * The {@code MeetingController} class handles routing for meeting-related views and actions within the application.
+     * It uses the {@link InsightFactory} for data access and {@link Configuration} for rendering templates with FreeMarker.
+     */
 
     private final InsightFactory insightFactory;
 
     private final Configuration cfg;
-
+    /**
+     * Constructs a {@code MeetingController} with a specified {@link InsightFactory} and {@link Configuration}.
+     * It initializes routes relevant to meeting management.
+     *
+     * @param insightFactory The factory for accessing meeting data.
+     * @param cfg The FreeMarker configuration for template rendering.
+     * @throws IOException If an I/O error occurs during route initialization.
+     */
     public MeetingController(InsightFactory insightFactory, Configuration cfg)
             throws IOException {
         this.insightFactory = insightFactory;
@@ -30,13 +41,24 @@ public class MeetingController {
     }
 
 
-
+    /**
+     * Initializes the web routes for handling meeting-related requests. This includes:
+     * - Redirecting unauthenticated users to the login page.
+     * - Redirecting users with specific roles to appropriate pages.
+     * - Handling requests to the root ("/") and index ("/index") routes by rendering the meetings list.
+     * - Providing a custom "not found" page for dead links through the "/data_not_found" route.
+     *
+     * @throws IOException If an error occurs in setting up the routes or during template processing.
+     */
     private void initializeRoutes() throws IOException {
-
+        // Route for the application's root that displays lectures or redirects based on user status.
         get("/", new FreemarkerBasedRoute("/", "index.ftl", cfg) {
             @Override
             public void doHandle(Request request, Response response, Writer writer)
                     throws IOException, TemplateException {
+                // Authentication and redirection logic.
+                // Display lectures if user is authenticated and has the correct permissions.
+
                 Session session = request.session();
                 String username = session.attribute("username");
                 if (username == null) {
@@ -59,6 +81,17 @@ public class MeetingController {
         });
 
         get("/index", new FreemarkerBasedRoute("/index", "index.ftl", cfg) {
+            /**
+             * Handles requests to the home page ("/"). It checks if the user is logged in and redirects
+             * accordingly. If the user is logged in and has the correct permissions, it retrieves and displays
+             * a list of lectures.
+             *
+             * @param request  The HTTP request.
+             * @param response The HTTP response.
+             * @param writer   The writer to output the rendered template.
+             * @throws IOException If an I/O error occurs.
+             * @throws TemplateException If an error occurs in template processing.
+             */
             @Override
             public void doHandle(Request request, Response response, Writer writer)
                     throws IOException, TemplateException {
@@ -78,6 +111,15 @@ public class MeetingController {
 
         // tells the user that the URL is dead
         get("/data_not_found", new FreemarkerBasedRoute("/data_not_found", "data_not_found.ftl", cfg) {
+            /**
+             * Provides a custom "not found" page for dead links.
+             *
+             * @param request  The HTTP request.
+             * @param response The HTTP response.
+             * @param writer   The writer to output the rendered template.
+             * @throws IOException If an I/O error occurs.
+             * @throws TemplateException If an error occurs in template processing.
+             */
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
                     throws IOException, TemplateException {
