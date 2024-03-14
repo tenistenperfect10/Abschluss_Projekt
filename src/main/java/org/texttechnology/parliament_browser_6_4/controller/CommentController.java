@@ -1,4 +1,10 @@
 package org.texttechnology.parliament_browser_6_4.controller;
+
+
+import freemarker.template.Configuration;
+import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
+
+import java.io.IOException;
 /**
  * The {@code CommentController} class is responsible for managing the routes related to comments
  * in the application. It initializes the routes that handle the CRUD operations for comments
@@ -7,12 +13,6 @@ package org.texttechnology.parliament_browser_6_4.controller;
  * This controller utilizes an {@link InsightFactory} for accessing the data layer and a
  * {@link Configuration} instance from the FreeMarker template engine to render the UI.
  */
-
-import freemarker.template.Configuration;
-import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
-
-import java.io.IOException;
-
 public class CommentController {
     /**
      * Factory for accessing comment data and insights.

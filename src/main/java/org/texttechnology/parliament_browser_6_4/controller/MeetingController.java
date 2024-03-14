@@ -15,15 +15,20 @@ import java.io.Writer;
 import java.util.List;
 
 import static spark.Spark.get;
-
+/**
+ * The {@code MeetingController} class is responsible for managing the routes associated with meeting-related views and actions.
+ * It utilizes the {@link InsightFactory} for accessing data related to meetings and the {@link Configuration} object from FreeMarker
+ * to render HTML templates. This controller sets up the endpoints for actions such as viewing meeting details, listing meetings,
+ * and other functionalities related to meetings within the application.
+ */
 public class MeetingController {
     /**
-     * The {@code MeetingController} class handles routing for meeting-related views and actions within the application.
-     * It uses the {@link InsightFactory} for data access and {@link Configuration} for rendering templates with FreeMarker.
+     * An instance of {@link InsightFactory} for accessing meeting-related data.
      */
-
     private final InsightFactory insightFactory;
-
+    /**
+     * The FreeMarker {@link Configuration} instance used for rendering views.
+     */
     private final Configuration cfg;
     /**
      * Constructs a {@code MeetingController} with a specified {@link InsightFactory} and {@link Configuration}.

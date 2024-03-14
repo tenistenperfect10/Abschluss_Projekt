@@ -36,7 +36,7 @@ public class SyncDBTask {
             FileUtils.unzip(zipFilePath, destDirectory);
             System.out.println("Unzip successfully");
         } catch (IOException e) {
-            System.out.println("An error occurred while decompressing：" + e.getMessage());
+            System.out.println("An error occurred while decompressing:" + e.getMessage());
         }
     }
 

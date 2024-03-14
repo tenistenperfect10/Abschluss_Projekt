@@ -84,7 +84,6 @@ public class FileUtils {
      * Counts the number of files within a zip archive.
      * @param zipFilePath Path to the zip file.
      * @return The number of files in the zip archive, or null if the file doesn't exist.
-     * @throws IOException If an I/O error occurs while reading the zip file.
      */
     public static Integer countFilesInZip(String zipFilePath) {
         if (!fileExists((zipFilePath))) {
@@ -122,7 +121,6 @@ public class FileUtils {
      * Loads properties from the specified properties file.
      * @param filePath The path to the properties file.
      * @return A Properties object containing the loaded properties.
-     * @throws IOException If an error occurs while loading the properties file.
      */
     public static Properties getProperties(String filePath) {
         Properties properties = new Properties();

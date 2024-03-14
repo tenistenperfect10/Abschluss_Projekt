@@ -1,10 +1,4 @@
 package org.texttechnology.parliament_browser_6_4.controller;
-/**
- * The {@code LogController} class is responsible for handling log-related routes in the application.
- * It defines the endpoint for retrieving logs and returning them in a JSON format. This controller
- * utilizes a {@code LogDAO} for data access and a {@code Configuration} instance for any potential
- * template rendering.
- */
 
 import freemarker.template.Configuration;
 import org.bson.Document;
@@ -19,6 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.post;
+/**
+ * The {@code LogController} class is responsible for handling log-related routes in the application.
+ * It defines the endpoint for retrieving logs and returning them in a JSON format. This controller
+ * utilizes a {@code LogDAO} for data access and a {@code Configuration} instance for any potential
+ * template rendering.
+ */
 
 public class LogController {
 

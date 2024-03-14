@@ -95,7 +95,7 @@ public class DownloadTask {
         for (int i = 0; i < dtdsUrls.size(); i++) {
             HttpRequestUtils.downloadFile(dtdsUrls.get(i), zipDir + (i + 1) + ".dtd");
         }
-        System.out.println("The dtd file download is complete！！！");
+        System.out.println("The dtd file download is complete!!!");
     }
 
     /**
@@ -189,7 +189,7 @@ public class DownloadTask {
         // Compress files and delete useless folders
         FileUtils.zipFiles(zipDir, dir + File.separator + "Bundestagreden.zip");
         deleteDirectory(directory); // Delete the directory and all its subfiles
-        System.out.println("xml file download complete！！！");
+        System.out.println("xml file download complete!!!");
     }
 
     private static void storeFileCount() {

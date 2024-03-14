@@ -268,7 +268,7 @@ public class InsightFactory_Impl implements InsightFactory {
     public boolean updateSpeakerById(ObjectId id, String json) {
         speakerCollection = this.dbConnectionHandler.getCollection("speaker");
 
-        Document query = new Document("_id", id); // 替换成你实际的查询条件
+        Document query = new Document("_id", id); // Replace it with your actual query
         Document update = new Document("$set", Document.parse(json));
         UpdateResult updateResult = speakerCollection.updateOne(query, update);
         return updateResult.getModifiedCount() > 0;
