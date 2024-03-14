@@ -18,31 +18,34 @@ import java.util.concurrent.TimeUnit;
 
 import static org.texttechnology.parliament_browser_6_4.helper.FileUtils.deleteDirectory;
 import static org.texttechnology.parliament_browser_6_4.helper.FileUtils.storeProperty;
-
+/**
+ * Handles the tasks of downloading, unzipping, and organizing data related to parliamentary speeches and documents.
+ * This includes managing directories, downloading DTDs and ZIP files, parsing URLs, and synchronizing XML data.
+ */
 public class DownloadTask {
 
-    // 根目录
+    // path for resources
     public static String dir = "src/main/resources";
 
-    // 压缩包文件名
+    // Directory for storing ZIP files
     public static String zipDir = dir + File.separator + "Bundestagreden" + File.separator;
 
-    // 目录
+    // Directory object for the ZIP storage
     public static File directory = new File(zipDir);
 
-    // 存储需要下载的文件信息（线程安全）
+    // Thread-safe map for storing download information
     private static final ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
 
-    // 待下载的元数据信息
+    // Set for storing metadata information for download
     private static final Set<String> relativeSet = new HashSet<>();
 
-    // 待下载的dtd链接
+    //  List of DTD URLs to download
     private static List<String> dtdsUrls = new ArrayList<>();
 
-    // 线程池
+    // thread pool
     private static ExecutorService executorService ;
 
-    // 静态代码块初始化
+    // Static Code Block Initialization
     static {
         Properties properties = FileUtils.getProperties("properties/keywords.properties");
         relativeSet.addAll(Arrays.asList(properties.getProperty("keywords").split(",")));
@@ -52,52 +55,52 @@ public class DownloadTask {
 
 
     /**
-     * 检查指定名称的压缩文件是否下载完成并且完整
-     * @param name 指定的文件名称
-     * @param expect 期望的文件数量
-     * @return 如果文件已全部下载完成且完整则返回true，否则返回false
+     * Checks if a specified ZIP file has been completely downloaded and is intact.
+     * @param name The name of the ZIP file to check.
+     * @param expect The expected number of files within the ZIP.
+     * @return True if the file is fully downloaded and intact, otherwise false.
      */
     private static boolean check(String name, Integer expect) {
         String filePath = dir + File.separator + name + ".zip";
         Integer count = FileUtils.countFilesInZip(filePath);
         if (count == null) {
-            System.out.println(name + ".zip未下载");
+            System.out.println(name + ".zip file not downloaded");
             return false;
         }
         if (count < expect) {
-            System.out.println(name + ".zip文件未完整下载");
+            System.out.println(name + ".zip file not fully downloaded");
             return false;
         }
-        System.out.println(name + ".zip文件已全部下载完成");
+        System.out.println(name + ".zip file has been fully downloaded");
         return true;
     }
 
     /**
-     * 创建目录
-     * @param name 目录名称
+     * Creates a directory for storing downloaded files.
+     * @param name The name of the directory to create.
      */
     public static void makeDir(String name) {
         if (directory.exists()) {
-            deleteDirectory(directory); // 删除目录及其所有子文件
+            deleteDirectory(directory); // Delete the directory and all its subfiles
             deleteDirectory(new File(dir + File.separator + name + ".zip"));
         }
-        directory.mkdirs(); // 创建目录及其父目录
+        directory.mkdirs(); // Creating directories and their parents
     }
 
     /**
-     * 下载DTD文件
-     * @throws IOException 输入输出异常
+     * Downloads DTD files from predefined URLs.
+     * @throws IOException If an I/O exception occurs.
      */
     private static void downloadDtds() throws IOException {
         for (int i = 0; i < dtdsUrls.size(); i++) {
             HttpRequestUtils.downloadFile(dtdsUrls.get(i), zipDir + (i + 1) + ".dtd");
         }
-        System.out.println("dtd文件下载完成！！！");
+        System.out.println("The dtd file download is complete！！！");
     }
 
     /**
-     * 下载ZIP文件
-     * @throws IOException 输入输出异常
+     * Downloads a ZIP file
+     * @throws IOException If an I/O exception occurs.
      */
     private static void downloadZip() throws IOException {
         Properties properties = FileUtils.getProperties("properties/keywords.properties");
@@ -106,9 +109,9 @@ public class DownloadTask {
     }
 
     /**
-     * 初始化请求URL
-     * @return 相对ID列表
-     * @throws IOException 输入输出异常
+     * Initializes the request URLs for downloading based on specific criteria.
+     * @return A list of relative IDs useful for constructing request URLs.
+     * @throws IOException If an I/O exception occurs.
      */
     private static List<String> initRequestUrl() throws IOException {
         HttpURLConnection connection = HttpRequestUtils.getBaseConnection("https://www.bundestag.de/services/opendata");
@@ -116,7 +119,7 @@ public class DownloadTask {
         HttpRequestUtils.handleHttpRequest(connection, response);
         Document doc = Jsoup.parse(response.toString());
 
-        Elements sections = doc.select("section"); // 通过类名选择元素
+        Elements sections = doc.select("section"); // Selecting elements by class name
         List<String> relativeIdList = new ArrayList<>();
         for (Element section : sections) {
             Element title = section.selectFirst(".bt-title");
@@ -129,9 +132,10 @@ public class DownloadTask {
     }
 
     /**
-     * 构建URL链接
-     * @param id 标识符
-     * @return url 构建的URL链接
+     * Constructs a URL based on an identifier and offset for pagination.
+     * @param id The identifier for constructing the URL.
+     * @param offset The offset for pagination.
+     * @return The constructed URL as a String.
      */
     private static String buildUrl(String id, int offset) {
         String url = "https://www.bundestag.de/ajax/filterlist/de/services/opendata/" + id + "-" + id + "?limit=10&noFilterSet=true&offset=" + offset;
@@ -140,9 +144,10 @@ public class DownloadTask {
     }
 
     /**
-     * 下载指定id对应的文件，并打包成zip文件
-     * @param id 指定的id
-     * @throws IOException 输入输出异常
+     * Builds a map of download links by parsing the specified id and offsets,
+     * facilitating the download of files and their packaging into ZIP files.
+     * @param id The identifier to use for constructing download URLs.
+     * @throws IOException If an I/O exception occurs.
      */
     private static void buildDownloadMap(String id) throws IOException {
         int offsetIdx = 0;
@@ -153,7 +158,7 @@ public class DownloadTask {
             HttpRequestUtils.handleHttpRequest(connection, response);
             Document doc = Jsoup.parse(response.toString());
             Elements elements = doc.select(".bt-documents-description");
-            // 如果找不到对应的DOM，则退出
+            // Exit, if the corresponding DOM is not found
             if (elements.isEmpty()) {
                 return;
             }
@@ -166,25 +171,25 @@ public class DownloadTask {
     }
 
     /**
-     * 下载文件并压缩
-     * @throws IOException 如果发生I/O异常
+     * Downloads XML files based on links stored in a map and packages them into a ZIP file.
+     * @throws IOException If an I/O exception occurs.
      */
     private static void downloadXml() throws IOException {
         final int[] count = {0};
-        // 遍历下载文件
+        // Iterate through the download file
         map.forEach((key, value) -> {
             try {
                 System.out.println(key  + " ->" + value);
                 count[0]++;
                 HttpRequestUtils.downloadFile(value,   zipDir + count[0] + ".xml");
             } catch (IOException e) {
-                System.out.println(key + "对应的文件出现IO异常:" + e);
+                System.out.println(key + "IO exception for the corresponding file:" + e);
             }
         });
-        // 压缩文件并删除无用文件夹
+        // Compress files and delete useless folders
         FileUtils.zipFiles(zipDir, dir + File.separator + "Bundestagreden.zip");
-        deleteDirectory(directory); // 删除目录及其所有子文件
-        System.out.println("xml文件下载完成！！！");
+        deleteDirectory(directory); // Delete the directory and all its subfiles
+        System.out.println("xml file download complete！！！");
     }
 
     private static void storeFileCount() {
@@ -193,9 +198,11 @@ public class DownloadTask {
     }
 
     /**
-     * 主方法，初始化请求URL并下载数据
-     * @param args 命令行参数
-     * @throws IOException 输入输出异常
+     * The main method to execute the download task. It orchestrates the entire process,
+     * including checking existing files, making directories, initializing URLs, downloading,
+     * and storing data.
+     * @param args Command-line arguments.
+     * @throws Exception If any exception occurs during the process.
      */
     public static void main(String[] args) throws Exception {
         if (!check("MdB-Stammdaten", 2)) {
@@ -223,11 +230,11 @@ public class DownloadTask {
                 e.printStackTrace();
             }
         });
-        // 等待异步线程整理完下载信息后统一下载
+        //  Wait for the asynchronous thread to finish sorting out the download information and then unify the downloads
         executorService.shutdown();
         executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         downloadXml();
-        System.out.println("Map中的元素个数为: " + map.size());
+        System.out.println("The number of elements in the Map is: " + map.size());
         storeFileCount();
     }
 }

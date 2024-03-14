@@ -13,7 +13,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
+/**
+ * A utility class providing static methods for MongoDB interactions. It includes functionality
+ * for connecting to a MongoDB database, accessing or creating collections, listing collection names,
+ * and inserting documents into a collection. The class automatically establishes a connection
+ * with the database upon loading, based on properties specified in a configuration file.
+ */
 public class MongoDBUtils {
 
     private static MongoClient mongoClient;
@@ -37,14 +42,15 @@ public class MongoDBUtils {
             databaseName = properties.getProperty("remote_database");
             connect();
         } catch (Exception e) {
-            System.out.println("获取mongodb初始化配置失败");
+            System.out.println("Failure to get mongodb initialization configuration");
             e.printStackTrace();
         }
     }
 
     /**
-     * 连接到指定数据库
-     * @throws IllegalArgumentException 如果数据库名称为空或null
+     * Establishes a connection to the MongoDB database using the settings configured in the
+     * `mongodb.properties` file. It initializes the {@code mongoClient} and {@code database} static fields.
+     * This method is called automatically when the class is loaded.
      */
     private static void connect() {
         MongoCredential credential = MongoCredential.createCredential(username, databaseName, password.toCharArray());
@@ -67,25 +73,26 @@ public class MongoDBUtils {
     }
 
     /**
-     * 获取指定名称的集合
-     * @param collectionName 要获取的集合名称
-     * @return 返回指定名称的集合
+     * Retrieves a collection from the MongoDB database by its name. If the collection does not exist,
+     * it is created.
+     * @param collectionName The name of the collection to retrieve.
+     * @return The MongoCollection instance for the specified name.
      */
     public static MongoCollection<Document> getCollection(String collectionName) {
         for (String existingCollection : database.listCollectionNames()) {
             if (existingCollection.equals(collectionName)) {
-                return database.getCollection(collectionName); // 返回已存在的集合
+                return database.getCollection(collectionName); // Returns a collection that already exists
             }
         }
 
         database.createCollection(collectionName);
-        return database.getCollection(collectionName); // 返回新创建的集合
+        return database.getCollection(collectionName); // Returns the newly created collection
     }
 
 
     /**
-     * 获取数据库中所有集合的名称
-     * @return 返回包含所有集合名称的列表
+     * Lists the names of all collections in the MongoDB database.
+     * @return A list of collection names in the database.
      */
     public static List<String> listCollections() {
         List<String> collectionNames = new ArrayList<>();
@@ -96,9 +103,9 @@ public class MongoDBUtils {
     }
 
     /**
-     * 插入文档到MongoDB集合中
-     * @param collection MongoDB集合
-     * @param document 要插入的文档
+     * Inserts a document into the specified MongoDB collection.
+     * @param collection The collection into which the document will be inserted.
+     * @param document The document to insert into the collection.
      */
     public static void insertDocument(MongoCollection<Document> collection, Document document) {
         collection.insertOne(document);

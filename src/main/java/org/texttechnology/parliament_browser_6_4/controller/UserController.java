@@ -20,20 +20,35 @@ import java.util.List;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
-
+/**
+ * Controller class for handling user-related operations like login, registration, password update, and user management.
+ * It interacts with the InsightFactory to perform operations on user data and uses Freemarker templates for rendering views.
+ */
 public class UserController {
 
     private final InsightFactory insightFactory;
     private final Configuration cfg;
 
-
+    /**
+     * Constructs a UserController with the specified InsightFactory and Configuration for template rendering.
+     * Initializes routes for user-related endpoints.
+     *
+     * @param insightFactory The InsightFactory for user data operations.
+     * @param cfg The Configuration object for Freemarker template engine setup.
+     * @throws IOException If an input or output exception occurred.
+     */
     public UserController(InsightFactory insightFactory, Configuration cfg)
             throws IOException {
         this.insightFactory = insightFactory;
         this.cfg = cfg;
         initializeRoutes();
     }
-
+    /**
+     * Initializes routes for handling user operations such as login, registration, forgetting password, updating password, and user management.
+     * This method sets up endpoints for both GET and POST requests to manage user-related functionalities.
+     *
+     * @throws IOException If an input or output exception occurred.
+     */
     private void initializeRoutes() throws IOException {
         get("/login", new FreemarkerBasedRoute("/login", "login.ftl", cfg) {
             @Override
@@ -157,7 +172,7 @@ public class UserController {
                 } else {
                     userImpl.setCanEdit(0);
                 }
-               insightFactory.updateUserPermission(userImpl);
+                insightFactory.updateUserPermission(userImpl);
                 return Result.buildSuccess();
             } catch (Exception e) {
                 return Result.buildError(e.getMessage());
