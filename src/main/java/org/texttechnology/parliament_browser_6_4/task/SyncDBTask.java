@@ -14,19 +14,29 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * A task class for synchronizing the data from an XML file to a MongoDB database.
+ * It involves unzipping the XML data file and parsing each member's data to be stored in the database.
+ */
+
 public class SyncDBTask {
+    // Collection in MongoDB to store Member documents
 
-    private static MongoCollection<Document> abgeordnter = MongoDBUtils.getCollection("Abgeordneter");
+    private static MongoCollection<Document> abgeordnter = MongoDBUtils.getCollection("Abgeordnter");
 
+    /**
+     * Unzips the specified XML data file for processing.
+     * This method extracts the contents of the ZIP file into a designated directory for further processing.
+     */
     private static void unzipFile() {
         String zipFilePath = "src/main/resources/MdB-Stammdaten.zip";
         String destDirectory = "src/main/resources/MdB-Stammdaten/";
 
         try {
             FileUtils.unzip(zipFilePath, destDirectory);
-            System.out.println("解压成功");
+            System.out.println("Unzip successfully");
         } catch (IOException e) {
-            System.out.println("解压时发生错误：" + e.getMessage());
+            System.out.println("An error occurred while decompressing：" + e.getMessage());
         }
     }
 
@@ -34,7 +44,7 @@ public class SyncDBTask {
         String xmlPath = "src/main/resources/MdB-Stammdaten/MDB_STAMMDATEN.XML";
         org.w3c.dom.Document doc = XMLUtils.getDocument(xmlPath);
         if (doc == null) {
-            System.out.println("读取XML文件失败");
+            System.out.println("Failed to read XML file");
             return;
         }
         NodeList nodeList = doc.getElementsByTagName("MDB");
@@ -46,12 +56,17 @@ public class SyncDBTask {
                 document.append("_id", member.getId());
                 MongoDBUtils.insertDocument(abgeordnter, document);
             }
-            System.out.println("总任务为" + nodeList.getLength() + ", 目前第" + i + "个任务正在执行--------------");
+            System.out.println("The total tasks are" + nodeList.getLength() + ", Current" + i + "task is currently being executed--------------");
         }
-        System.out.println("数据同步任务执行结束");
+        System.out.println("End of data synchronization task execution");
         FileUtils.deleteDirectory(new File("src/main/resources/MdB-Stammdaten/"));
     }
-
+    /**
+     * The main method to run the synchronization task.
+     * It performs the steps required to unzip the XML data file and parse the contents into the MongoDB database.
+     * @param args Command-line arguments (not used).
+     * @throws IOException If there is an issue with file access, reading, or writing.
+     */
     public static void main(String[] args) throws IOException {
         unzipFile();
         parseXMLToDB();

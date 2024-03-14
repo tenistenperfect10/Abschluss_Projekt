@@ -1,0 +1,6 @@
+remote_host = ppr2023.texttechnologylab.org
+remote_database = Project_06_04
+remote_user = Project_06_04
+remote_password = Jdiza87F
+remote_port = 27020
+remote_collection = insight

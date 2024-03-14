@@ -9,7 +9,10 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Handles connections to MongoDB, including initializing the connection with specified configuration,
+ * accessing collections, and fetching documents from the database.
+ */
 public class MongoDBConnectionHandler {
 
     private MongoDBConfig pConfig = null;
@@ -29,11 +32,22 @@ public class MongoDBConnectionHandler {
      */
     private MongoCollection<Document> pCollection = null;
 
+    /**
+     * Constructs a new {@code MongoDBConnectionHandler} with the specified configuration,
+     * and initializes the connection to MongoDB.
+     *
+     * @param pConfig The MongoDB configuration to use for connecting to the database.
+     */
     public MongoDBConnectionHandler(MongoDBConfig pConfig){
         this.pConfig = pConfig;
         init();
     }
 
+    /**
+     * Initializes the connection to MongoDB using the provided configuration.
+     * This includes setting up credentials, server address, connection options,
+     * and selecting the default collection.
+     */
     private void init(){
 
         // defind credentials (Username, database, password)
@@ -67,18 +81,33 @@ public class MongoDBConnectionHandler {
 
     }
 
+    /**
+     * Returns the default collection object.
+     *
+     * @return The default {@link MongoCollection}.
+     */
     public MongoCollection getCollection(){
         return this.pCollection;
     }
 
     /**
-     * Method to return the default Collection
-     * @return MongoCollection
+     * Returns a collection object for the specified collection name.
+     *
+     * @param sCollection The name of the collection to retrieve.
+     * @return The specified {@link MongoCollection}.
      */
     public MongoCollection getCollection(String sCollection){
         return this.pDatabase.getCollection(sCollection);
     }
 
+
+    /**
+     * Retrieves a document object by its ID from the specified collection.
+     *
+     * @param sID The ID of the document to retrieve.
+     * @param sCollection The name of the collection to search in.
+     * @return The found {@link Document}, or {@code null} if no document matches the given ID.
+     */
     public Document getObject(String sID, String sCollection){
 
         BasicDBObject whereQuery = new BasicDBObject();
@@ -97,6 +126,12 @@ public class MongoDBConnectionHandler {
         return doc;
 
     }
+
+    /**
+     * Returns the database object for the currently selected MongoDB database.
+     *
+     * @return The current {@link MongoDatabase}.
+     */
     public MongoDatabase getDatabase(){ return this.pDatabase;}
 
 }

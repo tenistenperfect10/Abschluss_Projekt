@@ -15,18 +15,27 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * A parser class for processing and parsing member data from external sources into Member objects,
+ * and for syncing image data with these member entities.
+ */
 public class MdbParser {
+    /**
+     * Syncs image data to a Member object by performing an HTTP request to fetch image data based on
+     * the member's first and last name, parsing the response, and adding the image data to the Member object.
+     * @param member The Member object to which image data is to be synced.
+     * @throws IOException If an I/O error occurs during the HTTP request or while parsing the response.
+     */
 
     public static void syncImgToMember(Member member) throws IOException {
-        // 通过http请求获取数据
+        // Getting data via http request
         String firstName = member.getNachName();
         String lastName = member.getVorName();
         String url = String.format("https://bilddatenbank.bundestag.de/search/picture-result?filterQuery[name][]=%s,+%s&sortVal=3", firstName, lastName);
         HttpURLConnection connection = HttpRequestUtils.getBaseConnection(url);
         StringBuilder response = new StringBuilder();
         HttpRequestUtils.handleHttpRequest(connection, response);
-        // 解析页面数据，补充Member对象的头像相关信息
+        // Parsing page data to add information about the Member object's avatarring());
         Document doc = Jsoup.parse(response.toString());
         Elements items = doc.select(".rowGridContainer>.item>a");
         List<MemberImg> memberImgs = new ArrayList<>();
@@ -38,6 +47,15 @@ public class MdbParser {
         member.setMemberImgList(memberImgs);
     }
 
+
+    /**
+     * Parses a Member entity from a given XML Node object. This method extracts member-related information
+     * from the XML Node, constructs a Member object with the extracted data, and optionally syncs image data
+     * to the Member object by calling syncImgToMember.
+     * @param node The XML Node object containing member data.
+     * @return A Member object populated with data extracted from the XML Node.
+     * @throws IOException If an I/O error occurs during parsing or while syncing image data.
+     */
     public static Member parseMember(Node node) throws IOException {
         Element element = (Element) node;
         String id = element.getElementsByTagName("ID").item(0).getTextContent();

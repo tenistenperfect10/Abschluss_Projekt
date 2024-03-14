@@ -6,15 +6,17 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
+/**
+ * Provides utility methods for handling files, including zipping and unzipping files,
+ * deleting directories, and managing properties files.
+ */
 public class FileUtils {
 
     /**
-     * 将指定目录下的文件压缩为一个zip文件
-     * @param sourceDir 待压缩的文件目录
-     * @param zipFilePath 压缩后的zip文件路径
-     * @return 无返回值
-     * @throws IOException 如果在文件操作过程中发生异常
+     * Compresses files in the specified directory into a zip file.
+     * @param sourceDir Path to the directory containing files to be zipped.
+     * @param zipFilePath Path where the zip file will be created.
+     * @throws IOException If an I/O error occurs during file processing.
      */
     public static void zipFiles(String sourceDir, String zipFilePath) throws IOException {
         FileOutputStream fos = new FileOutputStream(zipFilePath);
@@ -26,11 +28,11 @@ public class FileUtils {
     }
 
     /**
-     * 将文件添加到zip压缩包中
-     * @param file 要添加到zip压缩包中的文件或目录
-     * @param zos ZipOutputStream对象，用于将文件添加到zip压缩包中
-     * @param parentDir 父级目录
-     * @throws IOException 如果发生I/O错误
+     * Adds files to the zip archive recursively.
+     * @param file The file or directory to add to the zip archive.
+     * @param zos ZipOutputStream to which the files will be written.
+     * @param parentDir The parent directory path for the file or directory being added.
+     * @throws IOException If an I/O error occurs.
      */
     private static void addFilesToZip(File file, ZipOutputStream zos, String parentDir) throws IOException {
         if (file.isDirectory()) {
@@ -54,9 +56,9 @@ public class FileUtils {
     }
 
     /**
-     * 递归删除指定目录
-     * @param directory 要删除的目录
-     * @throws SecurityException 如果没有删除权限
+     * Recursively deletes a directory and all of its contents.
+     * @param directory The directory to be deleted.
+     * @throws SecurityException If a security manager exists and denies the delete operation.
      */
     public static void deleteDirectory(File directory) {
         File[] allContents = directory.listFiles();
@@ -69,9 +71,9 @@ public class FileUtils {
     }
 
     /**
-     * 检查文件是否存在
-     * @param filePath 文件路径
-     * @return 如果文件存在则返回true，否则返回false
+     * Checks if a file exists at the specified path.
+     * @param filePath The path to the file.
+     * @return True if the file exists, false otherwise.
      */
     public static boolean fileExists(String filePath) {
         File file = new File(filePath);
@@ -79,10 +81,10 @@ public class FileUtils {
     }
 
     /**
-     * 计算压缩文件中的文件数量
-     * @param zipFilePath 压缩文件路径
-     * @return fileCount 压缩文件中的文件数量
-     * @throws IOException 如果发生I/O错误
+     * Counts the number of files within a zip archive.
+     * @param zipFilePath Path to the zip file.
+     * @return The number of files in the zip archive, or null if the file doesn't exist.
+     * @throws IOException If an I/O error occurs while reading the zip file.
      */
     public static Integer countFilesInZip(String zipFilePath) {
         if (!fileExists((zipFilePath))) {
@@ -100,11 +102,11 @@ public class FileUtils {
     }
 
     /**
-     * 存储属性到指定的文件中
-     * @param filePath 文件路径
-     * @param key 属性的键
-     * @param value 属性的值
-     * @param comments 注释
+     * Stores a property in the specified properties file.
+     * @param filePath The path to the properties file.
+     * @param key The key of the property to store.
+     * @param value The value of the property.
+     * @param comments Optional comments to include in the file.
      */
     public static void storeProperty(String filePath, String key, String value, String comments) {
         Properties properties = getProperties("properties/keywords.properties");
@@ -117,10 +119,10 @@ public class FileUtils {
     }
 
     /**
-     * 获取指定文件路径的属性集合
-     * @param filePath 文件路径
-     * @return 属性集合
-     * @throws IOException 如果发生IO异常
+     * Loads properties from the specified properties file.
+     * @param filePath The path to the properties file.
+     * @return A Properties object containing the loaded properties.
+     * @throws IOException If an error occurs while loading the properties file.
      */
     public static Properties getProperties(String filePath) {
         Properties properties = new Properties();
@@ -134,10 +136,10 @@ public class FileUtils {
     }
 
     /**
-     * 解压缩指定的zip文件到目标目录
-     * @param zipFilePath 要解压缩的zip文件路径
-     * @param destDirectory 目标目录路径
-     * @throws IOException 如果发生I/O错误
+     * Unzips the specified zip file to a destination directory.
+     * @param zipFilePath The path to the zip file to be unzipped.
+     * @param destDirectory The destination directory where the contents will be extracted.
+     * @throws IOException If an I/O error occurs during extraction.
      */
     public static void unzip(String zipFilePath, String destDirectory) throws IOException {
         byte[] buffer = new byte[1024];
@@ -161,11 +163,11 @@ public class FileUtils {
     }
 
     /**
-     * 从ZipInputStream中提取文件并保存到指定路径
-     * @param zipInputStream ZipInputStream输入流
-     * @param filePath 文件保存路径
-     * @param buffer 用于读取的字节数组
-     * @throws IOException 如果发生I/O错误
+     * Extracts a file from a ZipInputStream and saves it to the specified path.
+     * @param zipInputStream The ZipInputStream from which the file is to be extracted.
+     * @param filePath The path where the extracted file will be saved.
+     * @param buffer A buffer used for reading data from the ZipInputStream.
+     * @throws IOException If an I/O error occurs during file extraction.
      */
     private static void extractFile(ZipInputStream zipInputStream, String filePath, byte[] buffer) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
