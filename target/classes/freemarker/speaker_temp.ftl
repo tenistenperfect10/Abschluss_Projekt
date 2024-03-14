@@ -10,8 +10,8 @@
         }
         .card {
             border-radius: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 阴影效果 */
-            background-color: #ffffff; /* 背景色 */
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* shadow effect */
+            background-color: #ffffff; /* background color */
             padding: 20px;
             margin: 10px;
         }

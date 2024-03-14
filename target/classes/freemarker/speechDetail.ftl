@@ -50,7 +50,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        /* Setting the style of form items */
+        /* 设置表单项的样式 */
         .form-group {
             width: 80%;
             display: flex;

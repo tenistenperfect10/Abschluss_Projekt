@@ -95,7 +95,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        /* Setting the style of form items */
+        /* 设置表单项的样式 */
         .form-group {
             width: 80%;
             display: flex;
@@ -179,7 +179,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify(newSpeaker),
                     success: function(response) {
-                        // Actions on success, processing the response returned by the backend as needed
+                        // Act on success, handling the response returned by the backend as needed
                         if (response && response.code === 0) {
                             messageBox.showSuccess("Update succeed");
                             location.reload();
@@ -188,7 +188,7 @@
                         }
                     },
                     error: function(error) {
-                        // process error
+                        // 处理错误
                         console.log(error);
                     }
                 })

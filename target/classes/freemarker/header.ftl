@@ -28,7 +28,7 @@
         // URL of the backend POST interface
         var apiUrl = '/logs'
 
-        // Asynchronous POST requests using the Fetch API
+        //  Asynchronous POST requests using the Fetch API
         fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -50,7 +50,7 @@
         var tableBody = document.getElementById('dataBody');
         var tableHeader = document.getElementById('dataHeader');
 
-        // Empty form content
+        //  Empty form content
         tableBody.innerHTML = '';
         tableHeader.innerHTML = '';
 

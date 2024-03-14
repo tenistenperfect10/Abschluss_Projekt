@@ -104,9 +104,9 @@
                     return;
                 }
 
-                //  Sending Ajax Requests
+                // Sending Ajax Requests
                 $.ajax({
-                    url: '/api/register',  //  The URL where the backend receives the registration request
+                    url: '/api/register',  // The URL where the backend receives the registration request
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
