@@ -25,17 +25,36 @@ import java.util.*;
 
 import static spark.Spark.*;
 
+
+/**
+ * Controller for handling routes related to speaker information within the application.
+ * It utilizes InsightFactory for accessing data and Configuration for rendering FreeMarker templates.
+ */
 public class SpeakerController {
 
     private final InsightFactory insightFactory;
     private final Configuration cfg;
 
+    /**
+     * Constructs a SpeakerController with specified data access and template rendering configurations.
+     * Initializes routes for speaker-related actions.
+     *
+     * @param insightFactory The factory for accessing speaker data.
+     * @param cfg The FreeMarker configuration for template rendering.
+     * @throws IOException If an I/O error occurs during route initialization.
+     */
     public SpeakerController(InsightFactory insightFactory, Configuration cfg) throws IOException {
         this.insightFactory = insightFactory;
         this.cfg = cfg;
         initializeRoutes();
     }
 
+    /**
+     * Initializes the web routes for speaker-related functionalities including viewing speaker details,
+     * searching for speakers, and saving speaker data.
+     *
+     * @throws IOException If an error occurs in setting up the routes or during template processing.
+     */
     private void initializeRoutes() throws IOException {
 
         before("/speaker/*", (request, response) -> {
@@ -45,6 +64,7 @@ public class SpeakerController {
             }
         });
 
+        // Route for displaying the speaker list page
         get("/speaker", new FreemarkerBasedRoute("/speaker", "speaker.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
@@ -64,6 +84,7 @@ public class SpeakerController {
             }
         });
 
+        // Route for displaying detailed information about a specific speaker
         get("/speakerDetail/:id", new FreemarkerBasedRoute("/speakerDetail/:id", "speakerDetail.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
@@ -82,6 +103,7 @@ public class SpeakerController {
             }
         });
 
+        // Route for handling speaker search functionality
         post("/speaker/search", new FreemarkerBasedRoute("/speaker", "speaker.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
@@ -111,14 +133,14 @@ public class SpeakerController {
                 this.getTemplate().process(root, writer);
             }
         });
-
+        // API endpoint for saving or updating speaker information
         post("/api/speaker/save", (request, response) -> {
             response.type("application/json");
             try {
                 JSONObject obj = JSONUtil.parseObj(request.body());
                 System.out.println(obj);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                // 解析字符串并转换为Date对象
+                // Parsing strings and converting them to Date objects
                 Date geburtsdatum = null;
                 Date sterbedatum = null;
                 if (!JSONNull.NULL.equals(obj.get("geburtsdatum"))) {

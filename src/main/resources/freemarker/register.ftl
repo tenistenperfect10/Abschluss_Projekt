@@ -82,13 +82,13 @@
             $("#register-form").on('submit', function (e) {
                 e.preventDefault();
 
-                // 获取表单数据
+                // Getting form data
                 var username = $('#username').val();
                 var password = $('#password').val();
                 var confirm_password = $('#confirm_password').val();
                 var userType = $('input[name="userType"]:checked').val(); // 获取选中的用户类型
 
-                // 客户端验证逻辑
+                // Client-side validation logic
                 if (username.length < 4) {
                     messageBox.showError('The username must have at least 4 characters.');
                     return;
@@ -104,9 +104,9 @@
                     return;
                 }
 
-                // 发送 Ajax 请求
+                // Sending Ajax Requests
                 $.ajax({
-                    url: '/api/register',  // 后端接收注册请求的 URL
+                    url: '/api/register',  // The URL where the backend receives the registration request
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
@@ -115,7 +115,7 @@
                         'userType': userType,
                     }),
                     success: function(response) {
-                        // 处理注册成功的逻辑
+                        // Logic to handle successful registration
                         if (response && response.code === 0) {
                             messageBox.showSuccess("Register succeed");
                             window.open("/login", "_self");
@@ -124,7 +124,7 @@
                         }
                     },
                     error: function(error) {
-                        // 处理注册失败的逻辑
+                        // Logic for handling registration failures
                         messageBox.showError('Register failed');
                     }
                 });
