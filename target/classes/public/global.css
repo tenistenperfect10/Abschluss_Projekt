@@ -22,14 +22,13 @@ body {
     box-sizing: border-box;
 }
 
-/* Button Style */
+/* 按钮样式 */
 button {
-    padding: 10px 15px; /* Set padding */
-    background-color: #4CAF50; /* Set background color */
-    color: white; /* Set text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Set border radius */
-    cursor: pointer; /* Add pointer cursor */
-    transition: background-color 0.3s ease; /* Add transition effect */
-
+    padding: 10px 15px; /* 设置内边距 */
+    background-color: #4CAF50; /* 设置背景颜色 */
+    color: white; /* 设置文字颜色 */
+    border: none; /* 移除边框 */
+    border-radius: 5px; /* 设置边框圆角 */
+    cursor: pointer; /* 添加指针样式 */
+    transition: background-color 0.3s ease; /* 添加过渡效果 */
 }

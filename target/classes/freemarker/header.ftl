@@ -15,30 +15,30 @@
     function toggleAndFetch() {
         var panel = document.getElementById('panel');
 
-        // Toggles the display and hide state of the panel
+        // 切换面板的显示和隐藏状态
         panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
 
-        // If the panel is displayed, initiate a background POST request
+        // 如果面板显示，则发起后台 POST 请求
         if (panel.style.display === 'block') {
             fetchData();
         }
     }
 
     function fetchData() {
-        // URL of the backend POST interface
+        // 后台 POST 接口的 URL
         var apiUrl = '/logs'
 
-        //  Asynchronous POST requests using the Fetch API
+        // 使用 Fetch API 发起异步 POST 请求
         fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Additional request headers can be added as needed
+                // 可以根据需要添加其他请求头
             }
         })
             .then(response => response.json())
             .then(data => {
-                // Processing the returned data and rendering the form
+                // 处理返回的数据，渲染表格
                 renderTable(data);
             })
             .catch(error => {
@@ -50,35 +50,35 @@
         var tableBody = document.getElementById('dataBody');
         var tableHeader = document.getElementById('dataHeader');
 
-        //  Empty form content
+        // 清空表格内容
         tableBody.innerHTML = '';
         tableHeader.innerHTML = '';
 
         var headerRow = document.createElement('tr');
-        // Iterate over the data and create table rows
+        // 遍历数据并创建表格行
         data.header.forEach(item => {
-            // Iterate through each property and create table cells
+            // 遍历每个属性并创建表格单元格
                 var cell = document.createElement('td');
                 cell.textContent = item;
                 headerRow.appendChild(cell);
 
-            // Adding rows to a table body
+            // 将行添加到表格体中
             tableHeader.appendChild(headerRow);
         });
 
 
-        // Iterate over the data and create table rows
+        // 遍历数据并创建表格行
         data.data.forEach(item => {
             var row = document.createElement('tr');
 
-            // Iterate through each property and create table cells
+            // 遍历每个属性并创建表格单元格
             for (var key in item) {
                 var cell = document.createElement('td');
                 cell.textContent = item[key];
                 row.appendChild(cell);
             }
 
-            // Adding rows to a table body
+            // 将行添加到表格体中
             tableBody.appendChild(row);
         });
     }

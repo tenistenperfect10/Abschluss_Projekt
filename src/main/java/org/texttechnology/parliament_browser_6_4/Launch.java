@@ -3,7 +3,7 @@ package org.texttechnology.parliament_browser_6_4;
 import com.mongodb.client.MongoDatabase;
 import freemarker.template.Configuration;
 import org.texttechnology.parliament_browser_6_4.controller.*;
-import org.texttechnology.parliament_browser_6_4.dao.LogDAO;
+import org.texttechnology.parliament_browser_6_4.dao.*;
 import org.texttechnology.parliament_browser_6_4.data.Impl.InsightFactory_Impl;
 import org.texttechnology.parliament_browser_6_4.data.configuration.FreemarkerBasedRoute;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBConfig;
@@ -43,11 +43,18 @@ public class Launch {
 
         //System.out.println(factory.findBySpeechId("ID209613000"));
         // Initialize controllers for handling different application routes.
-        new MeetingController(factory, cfg);
+        //MeetingDAO meetingDAO = new MeetingDAO(mongoDatabase);
+        //CommentDAO commentDAO = new CommentDAO(mongoDatabase);
+        //SpeakerDAO speakerDAO = new SpeakerDAO(mongoDatabase);
+        //SpeechDAO speechDAO = new SpeechDAO(mongoDatabase);
+        UserDAO userDAO = new UserDAO(mongoDatabase);
+        LogDAO.init(mongoDatabase);
+
+        new MeetingController(factory, userDAO, cfg);
         new CommentController(factory, cfg);
         new SpeakerController(factory, cfg);
-        new SpeechController(factory, cfg);
-        new UserController(factory, cfg);
+        new SpeechController( cfg,factory);
+        new UserController(userDAO, cfg);
     }
 
     /**

@@ -1,81 +1,70 @@
 package org.texttechnology.parliament_browser_6_4.controller;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.mongodb.client.AggregateIterable;
+
 import freemarker.template.Configuration;
 import freemarker.template.SimpleHash;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.bson.Document;
+import org.texttechnology.parliament_browser_6_4.data.Impl.LatexBuilder;
+import org.texttechnology.parliament_browser_6_4.data.Impl.LatexSpeech_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.Speech_mongoDB_Impl;
 import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
+import org.texttechnology.parliament_browser_6_4.data.Speech_mongoDB;
 import org.texttechnology.parliament_browser_6_4.data.configuration.FreemarkerBasedRoute;
 import org.texttechnology.parliament_browser_6_4.helper.Result;
 import org.texttechnology.parliament_browser_6_4.helper.SessionsUtils;
 import spark.Request;
 import spark.Response;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
-/**
- * The {@code SpeechController} class manages routes related to speeches, including displaying speech details,
- * searching for speeches, and handling speech updates. It utilizes {@link InsightFactory} for data access
- * and {@link Configuration} for rendering templates.
- */
+
 public class SpeechController {
 
-    private final InsightFactory insightFactory;
+
+
     private final Configuration cfg;
 
-    /**
-     * Constructs a {@code SpeechController} with specified {@link InsightFactory} and {@link Configuration}.
-     * Initializes the web routes for speech-related operations.
-     *
-     * @param insightFactory The factory for accessing speech data.
-     * @param cfg The FreeMarker configuration for template rendering.
-     * @throws IOException If an I/O error occurs during route initialization.
-     */
-    public SpeechController( InsightFactory insightFactory, Configuration cfg)
+    private final InsightFactory insightFactory;
+
+    public SpeechController(Configuration cfg, InsightFactory insightFactory)
             throws IOException {
-        this.insightFactory = insightFactory;
+
         this.cfg = cfg;
+        this.insightFactory = insightFactory;
         initializeRoutes();
     }
 
-    /**
-     * Initializes the routes for handling requests related to speeches. This includes displaying a list of speeches,
-     * speech details, searching for speeches based on criteria, and updating speech information.
-     *
-     * @throws IOException If an error occurs in setting up the routes or rendering templates.
-     */
     private void initializeRoutes() throws IOException {
         get("/speech", new FreemarkerBasedRoute("/speech", "speech.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
                     throws IOException, TemplateException {
                 SessionsUtils.redirectIfNotLogin(request, response);
-                // Building Aggregate Queries
+                // 构建聚合查询
                 AggregateIterable<Document> speechList = insightFactory.aggregate();
 
                 SimpleHash root = new SimpleHash();
 
-                // Converting AggregateIterable to List
+                // 将AggregateIterable转换为List
                 List<Document> resultList = new ArrayList<>();
                 speechList.into(resultList);
                 System.out.println("total speech num is " + resultList.size());
-                // Conversion to cascading multi-level menu forms
+                // 转化为级联的多级菜单形式
                 Map<String, Map<String, List<Document>>> resultMap = convertCascadeMap(resultList);
-                root.put("speechMap", resultMap);
-//                root.put("speechList", resultList);
 
+                root.put("speechMap", resultMap);
                 this.getTemplate().process(root, writer);
             }
         });
@@ -89,11 +78,11 @@ public class SpeechController {
                 Integer canEdit = SessionsUtils.getSessionByKey(request, "canEdit");
 
                 String id = StringEscapeUtils.escapeHtml4(request.params(":id"));
-                Document speech = insightFactory.findBySpeechId(id);
+                Document speech = insightFactory.findSpeechById(id);
 
                 Document speaker = new Document();
                 if(StrUtil.isNotEmpty(speech.getString("speaker"))){
-                    speaker = insightFactory.findById(speech.getString("speaker"));
+                    speaker = insightFactory.findSpeakerById(speech.getString("speaker"));
                 }
                 List<String>  commentIds = speech.getList("comments", String.class);
 
@@ -105,10 +94,10 @@ public class SpeechController {
                 Date startDate = new Date(speech.get("starttime", Long.class));
                 Date endDate = new Date(speech.get("endtime", Long.class));
 
-                // Create a SimpleDateFormat object that specifies the desired formatting
+                // 创建一个SimpleDateFormat对象，指定所需的格式
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
-                // Converting a Date object to a string using the format method
+                // 使用format方法将Date对象转换为字符串
                 String formattedStartDate = sdf.format(startDate);
                 String formattedEndDate = sdf.format(endDate);
 
@@ -133,30 +122,25 @@ public class SpeechController {
 
                 SessionsUtils.redirectIfNotLogin(request, response);
 
-                String starttime = StringEscapeUtils.escapeHtml4(request.queryParams("startTime"));
-                String endtime = StringEscapeUtils.escapeHtml4(request.queryParams("endTime"));
+                String startTime = StringEscapeUtils.escapeHtml4(request.queryParams("startTime"));
+                String endTime = StringEscapeUtils.escapeHtml4(request.queryParams("endTime"));
 
+                // 创建一个SimpleDateFormat对象，指定所需的格式
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
                 Date startDate = null;
                 Date endDate = null;
                 String errorMsg = "";
-                if(StrUtil.isNotEmpty(starttime)){
-                    try {
-                        startDate = DateUtil.parse(starttime);
-                    }catch (Exception e){
-                        errorMsg += "Start time format error!";
+
+                try {
+                    startDate = sdf.parse(startTime);
+                    endDate = sdf.parse(endTime);
+                    if (startDate.after(endDate)) {
+                        errorMsg += "The start time cannot be greater than the end time!";
                     }
-                }
-                if(StrUtil.isNotEmpty(endtime)){
-                    try {
-                        endDate = DateUtil.parse(endtime);
-                    }catch (Exception e){
-                        errorMsg += "End time format error!";
-                    }
+                } catch (Exception e) {
+                    errorMsg += "Time format error!";
                 }
 
-                if(startDate != null && endDate != null && startDate.after(endDate)){
-                    errorMsg += "The start time cannot be greater than the end time!";
-                }
                 SimpleHash root = new SimpleHash();
 
                 if(StrUtil.isNotBlank(errorMsg)){
@@ -167,24 +151,18 @@ public class SpeechController {
 
                 AggregateIterable<Document> speechList = insightFactory.searchSpeech(startDate, endDate);
 
-                // Converting AggregateIterable to List
+                // 将AggregateIterable转换为List
                 List<Document> resultList = new ArrayList<>();
                 speechList.into(resultList);
                 System.out.println("search speech num is " + resultList.size());
-                // Conversion to cascading multi-level menu forms
+                // 转化为级联的多级菜单形式
                 Map<String, Map<String, List<Document>>> resultMap = convertCascadeMap(resultList);
 
-                // Create a SimpleDateFormat object that specifies the desired formatting
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-
-                // Converting a Date object to a string using the format method
-                String formattedStartDate = sdf.format(startDate);
-                String formattedEndDate = sdf.format(endDate);
 
                 root.put("speechMap", resultMap);
                 root.put("errorMsg", errorMsg);
-                root.put("startDate", formattedStartDate);
-                root.put("endDate", formattedEndDate);
+                root.put("startDate", startTime);
+                root.put("endDate", endTime);
 
                 this.getTemplate().process(root, writer);
             }
@@ -219,34 +197,84 @@ public class SpeechController {
             }
         });
 
+        get("/speech/download", (request, response) -> {
+            String pdfDirectory = "src/main/resources/pdf/";
+            String downloadFile = null;
+            try {
+                /** 查询结果并转化为LatexSpeech对象 */
+                String protocol = request.queryParams("protocol");
+                List<Document> speeches = insightFactory.queryDownloadSpeeches(protocol).into(new ArrayList<>());
+                Map<String, List<Document>> resultMap = convertCascadeMap(speeches).get(protocol);
+                Map<String, List<Speech_mongoDB>> speechMap = new HashMap<>();
+                resultMap.forEach((key, list) -> {
+                    List<Speech_mongoDB> speechList = list.stream().map(document -> {
+                        Speech_mongoDB_Impl speech = new Speech_mongoDB_Impl();
+                        speech.setSpeaker(document.getString("speakerName"));
+                        speech.setText(document.getString("text"));
+                        List<Document> commentsDocs = insightFactory.findByIds(document.getList("comments", String.class));
+                        List<String> comments = commentsDocs.stream().map(doc -> doc.getString("text")).collect(Collectors.toList());
+                        speech.setComments(comments);
+                        return speech;
+                    }).collect(Collectors.toList());
+                    speechMap.put(key, speechList);
+                });
+                LatexSpeech_Impl latexSpeech = new LatexSpeech_Impl();
+                latexSpeech.setTitle(protocol);
+                latexSpeech.setSpeechMap(speechMap);
+                /** 生成pdf并回传给前端 */
+                LatexBuilder latexBuilder = new LatexBuilder();
+                downloadFile = latexBuilder.build(latexSpeech);
+                System.out.println("after build: " + downloadFile);
+                response.header("Content-Disposition", "attachment; " + "filename=" +  downloadFile);
+                InputStream inputStream = new FileInputStream(pdfDirectory + downloadFile);
+                // 将文件内容写入响应输出流
+                OutputStream outputStream = response.raw().getOutputStream();
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+
+                // 关闭输入流和输出流
+                inputStream.close();
+                outputStream.close();
+
+                return response.raw();
+            } catch (Exception e) {
+                System.out.println("error downloadFile: " + downloadFile);
+                e.printStackTrace();
+                return Result.buildError(e.getMessage());
+            }
+        });
+
     }
 
 
+
     /**
-     * Transforms a list of {@link Document} objects into a nested map structure for hierarchical display.
-     * This is particularly useful for organizing speeches by speaker and title in a cascading manner.
-     *
-     * @param resultList The list of speech documents to organize.
-     * @return A map representing the hierarchical structure of speeches organized by speaker and title.
+     * 转化为多级级联的map，用于折叠和展开显示
+     * @param resultList
+     * @return Map<protocal, Map<index, List<Docuemnt>>>
      */
     private Map<String, Map<String, List<Document>>> convertCascadeMap(List<Document> resultList) {
         Map<String, Map<String, List<Document>>> resultMap = new HashMap<>();
         resultList.stream().forEach(result -> {
-            String key = result.getString("speakerId") + "&" + result.getString("speakerName");
+//            String key = result.getString("speakerId") + "&" + result.getString("speakerName");
+            String key = result.getString("title");
             if (!resultMap.containsKey(key)) {
-                Map<String, List<Document>> speakerMap = new HashMap<>();
+                Map<String, List<Document>> titleMap = new HashMap<>();
                 List<Document> documents = new ArrayList<>();
                 documents.add(result);
-                speakerMap.put(result.getString("title"), documents);
-                resultMap.put(key, speakerMap);
+                titleMap.put(result.getString("index"), documents);
+                resultMap.put(key, titleMap);
             } else {
-                Map<String, List<Document>> speakerMap = resultMap.get(key);
-                if (!speakerMap.containsKey(result.getString("title"))) {
+                Map<String, List<Document>> titleMap = resultMap.get(key);
+                if (!titleMap.containsKey(result.getString("index"))) {
                     List<Document> documents = new ArrayList<>();
                     documents.add(result);
-                    speakerMap.put(result.getString("title"), documents);
+                    titleMap.put(result.getString("index"), documents);
                 } else {
-                    speakerMap.get(result.getString("title")).add(result);
+                    titleMap.get(result.getString("index")).add(result);
                 }
             }
         });

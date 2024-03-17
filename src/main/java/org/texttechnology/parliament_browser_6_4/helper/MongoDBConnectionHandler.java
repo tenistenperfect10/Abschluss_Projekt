@@ -5,10 +5,24 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.json.JSONObject;
+import org.texttechnology.parliament_browser_6_4.data.AgendaItem;
+import org.texttechnology.parliament_browser_6_4.data.Comment;
+import org.texttechnology.parliament_browser_6_4.data.PlenaryProtocol;
+import org.texttechnology.parliament_browser_6_4.data.Speech;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static org.texttechnology.parliament_browser_6_4.helper.MongoDBUtils.listCollections;
+
 /**
  * Handles connections to MongoDB, including initializing the connection with specified configuration,
  * accessing collections, and fetching documents from the database.
@@ -133,5 +147,174 @@ public class MongoDBConnectionHandler {
      * @return The current {@link MongoDatabase}.
      */
     public MongoDatabase getDatabase(){ return this.pDatabase;}
+
+    public Document insertSpeech(Speech pSpeech) {
+
+        Document mongoDocument = new Document();
+        mongoDocument.put("_id", pSpeech.getID());
+        mongoDocument.put("text", pSpeech.getPlainText());
+        mongoDocument.put("length", pSpeech.getPlainText().length());
+        mongoDocument.put("speaker", pSpeech.getSpeaker().getID());
+
+        BasicDBObject protocolObject = new BasicDBObject();
+        PlenaryProtocol pProtocol = pSpeech.getProtocol();
+
+        protocolObject.put("date", pProtocol.getDate().getTime());
+        protocolObject.put("starttime", pProtocol.getStartTime().getTime());
+        protocolObject.put("endtime", pProtocol.getEndTime().getTime());
+        protocolObject.put("index", pProtocol.getIndex());
+        protocolObject.put("title", pProtocol.getTitle());
+        protocolObject.put("place", pProtocol.getPlace());
+        protocolObject.put("wp", pProtocol.getWahlperiode());
+
+        mongoDocument.put("protocol", protocolObject);
+
+        AgendaItem pItem = pSpeech.getAgendaItem();
+
+        JSONObject agendaItem = new JSONObject();
+        agendaItem.put("id", pItem.getID());
+        agendaItem.put("index", pItem.getIndex());
+        agendaItem.put("title", pItem.getTitle());
+
+        List comments = new ArrayList<>();
+
+        for (Comment c : pSpeech.getComments()) {
+            comments.add(c.getID());
+        }
+
+        mongoDocument.put("comments", comments);
+        mongoDocument.put("agenda", Document.parse(agendaItem.toString()));
+
+        mongoDocument.put("speaker", pSpeech.getSpeaker().getID());
+
+        this.getCollection("speech").insertOne(mongoDocument);
+
+        return mongoDocument;
+
+    }
+
+    public Document insertComment(Comment pComment){
+
+        // creating a empty MongoDocument and add attributes
+        Document mongoDocument = new Document();
+        mongoDocument.put("_id", pComment.getID());
+        mongoDocument.put("text", pComment.getContent());
+        mongoDocument.put("speaker", pComment.getSpeaker()!=null ? pComment.getSpeaker().getID() : "");
+        mongoDocument.put("speech", pComment.getSpeech()!=null ? pComment.getSpeech().getID() : "");
+
+        this.getCollection("comment").insertOne(mongoDocument);
+
+        return mongoDocument;
+    }
+
+    /**
+     * 查询所有文档
+     * @param collection MongoDB文档集合
+     * @return documents 包含所有文档的列表
+     */
+    public static List<Document> queryAllDocuments(MongoCollection<Document> collection) {
+        List<Document> documents = new ArrayList<>();
+        FindIterable<Document> iterDoc = collection.find();
+        for (Document document : iterDoc) {
+            documents.add(document);
+        }
+        return documents;
+    }
+
+    /**
+     * 查询文档
+     * @param collection MongoDB文档集合
+     * @param filter 过滤条件
+     * @return 包含查询结果的文档列表
+     */
+    public static List<Document> findDocuments(MongoCollection<Document> collection, Bson filter) {
+        List<Document> documents = new ArrayList<>();
+        FindIterable<Document> result = collection.find(filter);
+        // 遍历查询结果并输出
+        for (Document document : result) {
+            documents.add(document);
+        }
+        return documents;
+    }
+
+
+    /**
+     * 更新文档
+     * @param collection MongoDB文档集合
+     * @param field 需要匹配的字段
+     * @param value 字段匹配的值
+     * @param updateField 需要更新的字段
+     * @param updateValue 更新的值
+     */
+    public static void updateDocument(MongoCollection<Document> collection, String field, String value, String updateField, Object updateValue) {
+        collection.updateMany(Filters.eq(field, value), Updates.set(updateField, updateValue));
+        System.out.println("Document update successfully...");
+    }
+
+    /**
+     * 删除指定集合中符合条件的文档
+     * @param collection 要操作的MongoDB集合
+     * @param field 字段名
+     * @param value 字段值
+     */
+    public static void deleteDocument(MongoCollection<Document> collection, String field, String value) {
+        collection.deleteOne(Filters.eq(field, value));
+        System.out.println("Document delete successfully...");
+    }
+
+    /**
+     * 删除指定名称的集合
+     * @param collectionName 需要删除的集合名称
+     */
+    public void dropCollection(String collectionName) {
+        MongoCollection<Document> collection = this.pDatabase.getCollection(collectionName);
+        System.out.println("chose collection : " + collection.getNamespace());
+        collection.drop();
+        System.out.println("drop collection : " + collection.getNamespace());
+        listCollections();
+    }
+
+    /**
+     * 关闭数据库连接
+     */
+    public  void closeConnection() {
+        pClient.close();
+        System.out.println("Connection closed.");
+    }
+
+
+
+
+    /**
+     * 通过字段和查询值查询文档条目
+     * @param collection MongoDB文档集合
+     * @param field 查询字段
+     * @param queryValue 查询值
+     * @return 包含查询结果的文档列表
+     */
+    public static List<Document> queryEntriesByField(MongoCollection<Document> collection, String field, String queryValue) {
+        Document query = new Document(field, new Document("$eq", queryValue));
+        List<Document> list = collection.find(query).into(new ArrayList<>());
+        return list;
+    }
+
+    /**
+     *
+     * @param collection 操作的collection
+     * @param fieldName 待更新文档的查询字段
+     * @param fieldValue 待更新文档查询字段的值
+     * @param json 待更新的json
+     */
+    public static void updateDocumentWithJson(MongoCollection<Document> collection, String fieldName, String fieldValue, String json) {
+
+        // 要更新的document的查询条件
+        Document query = new Document(fieldName, fieldValue); // 替换成你实际的查询条件
+
+        // 要添加的字段和值
+        Document update = new Document("$set", Document.parse(json));
+
+        // 执行更新操作
+        collection.updateOne(query, update);
+    }
 
 }

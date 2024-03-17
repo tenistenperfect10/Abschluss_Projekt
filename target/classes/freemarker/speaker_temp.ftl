@@ -10,8 +10,8 @@
         }
         .card {
             border-radius: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* shadow effect */
-            background-color: #ffffff; /* background color */
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 阴影效果 */
+            background-color: #ffffff; /* 背景色 */
             padding: 20px;
             margin: 10px;
         }
@@ -41,8 +41,8 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.5) 100%);
-            z-index: 999; /* Ensure that it is displayed at the top */
-            display: none; /* Not displayed in the initial state */
+            z-index: 999; /* 确保在顶层显示 */
+            display: none; /* 初始状态下不显示 */
         }
 
         .overlayImg {
@@ -64,12 +64,12 @@
     <script src="/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Click on the mask to disappear
+            // 点击蒙层消失
             $(".overlay").on("click", function () {
                 $(".overlay").hide();
             })
 
-            // Click on the card to show the mask
+            // 点击卡片展示蒙层
             $(".card").on("click", function () {
                 var url = $(this).find("img").attr("src");
                 var subHtml = $(this).find(".desc").attr("data-html");

@@ -5,17 +5,98 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a5a0352-c1fc-4577-97bb-f6fe21fc8e10" name="Changes" comment="Merge remote-tracking branch 'origin/main'">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_10_12__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_10_12__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/dao/UserDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/AgendaItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Comment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Fraction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/AgendaItem_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Comment_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Fraction_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/LatexBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/LatexSpeech_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Party_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/PlenaryObject_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/PlenaryProtocol_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Speaker_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Speech_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/Speech_mongoDB_Impl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/LatexSpeech.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Party.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/PlenaryObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/PlenaryProtocol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Speaker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Speech.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Speech_mongoDB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Types.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/exception/InputException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/StringHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/StringUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/XMLHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/favicon-16x16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/favicon-32x32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/swagger-initializer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/swagger-ui-bundle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/swagger-ui-standalone-preset.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/public/swagger/swagger-ui.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/Launch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/Launch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/CommentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/LogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/LogController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/MeetingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/MeetingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/SpeakerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/SpeakerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/SpeechController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/SpeechController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/dao/LogDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/dao/LogDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/InsightFactory_Impl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/InsightFactory_Impl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/task/DownloadTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/task/DownloadTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/User_Impl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/Impl/User_Impl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/InsightFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/data/InsightFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/MongoDBConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/helper/MongoDBConnectionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/task/SyncDBTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/texttechnology/parliament_browser_6_4/task/SyncDBTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/common.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/data_not_found.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/error_template.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/forget.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/header.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/index.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/login.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/register.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/speaker.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/speakerDetail.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/speaker_temp.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/speech.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/speechDetail.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/freemarker/userCenter.ftl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/properties/keywords.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/properties/keywords.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/public/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/public/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/common.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/common.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/forget.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/forget.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/header.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/header.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/login.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/login.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/register.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/register.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/speaker.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/speaker.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/speakerDetail.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/speakerDetail.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/speaker_temp.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/speaker_temp.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/speech.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/speech.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/speechDetail.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/speechDetail.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/freemarker/userCenter.ftl" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/freemarker/userCenter.ftl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/controller/UserController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/Impl/InsightFactory_Impl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/Impl/InsightFactory_Impl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/Impl/User_Impl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/Impl/User_Impl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/InsightFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/InsightFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/FileUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/FileUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/MongoDBConnectionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/MongoDBConnectionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/DownloadTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/DownloadTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/SyncDBTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/SyncDBTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/properties/keywords.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/properties/keywords.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/public/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/public/global.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,36 +156,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Launch.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SyncDBTask.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/12512/Desktop/parliament_browser_6_4-main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Launch.executor": "Run",
+    "Application.SyncDBTask.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/liuhe/IdeaProjects/parliament_browser_6_4/src/main/java/org/texttechnology/parliament_browser_6_4",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\liuhe\IdeaProjects\parliament_browser_6_4\src\main\java\org\texttechnology\parliament_browser_6_4" />
       <recent name="C:\Users\liuhe\IdeaProjects\parliament_browser_6_4\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\liuhe\IdeaProjects\parliament_browser_6_4\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.texttechnology.parliament_browser_6_4.data" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Launch">

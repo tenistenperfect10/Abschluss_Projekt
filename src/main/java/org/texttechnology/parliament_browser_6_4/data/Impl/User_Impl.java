@@ -16,6 +16,8 @@ public class User_Impl implements User {
 
     private Integer canEdit;
 
+    private String verifyCode;
+
     /**
      * Constructs a new User_Impl with specified username, password, user type, and edit permissions.
      *
@@ -99,6 +101,14 @@ public class User_Impl implements User {
     public void setCanEdit(Integer canEdit) {
         this.canEdit = canEdit;
     }
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
     /**
      * Returns a string representation of the user, including username, password,
      * user type, and edit permissions.
@@ -111,6 +121,7 @@ public class User_Impl implements User {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", userType=" + userType +
+                ", verifyCode=" + verifyCode +
                 ", canEdit=" + canEdit +
                 '}';
     }

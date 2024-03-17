@@ -158,7 +158,7 @@
                 method: "POST",
                 data: {username: selectedUserName},
                 success: function(response) {
-                    // Actions on success, processing the response returned by the backend as needed
+                    // 在成功后的操作，根据需要处理后端返回的响应
                     if (response && response.code === 0) {
                         messageBox.showSuccess("Assign succeed");
                         location.reload();
@@ -167,7 +167,7 @@
                     }
                 },
                 error: function(error) {
-                    // process error
+                    // 处理错误
                     console.log(error);
                 }
             });
@@ -179,7 +179,7 @@
                 method: "POST",
                 data: {username: selectedUserName},
                 success: function(response) {
-                    // Actions on success, processing the response returned by the backend as needed
+                    // 在成功后的操作，根据需要处理后端返回的响应
                     if (response && response.code === 0) {
                         messageBox.showSuccess("Delete succeed");
                         location.reload();
@@ -188,7 +188,7 @@
                     }
                 },
                 error: function(error) {
-                    // process error
+                    // 处理错误
                     console.log(error);
                 }
             });
@@ -236,18 +236,18 @@
                 </thead>
                 <tbody>
                     <#if users?has_content>
-                        <#list users as userImpl >
+                        <#list users as user >
                             <tr>
-                                <td>${userImpl["username"]}</td>
+                                <td>${user["username"]}</td>
                                 <td>
-                                    <button class="btn btn-info" onclick="assignPermission('${userImpl["username"]}')">
-                                        <#if userImpl.canEdit?exists && userImpl.canEdit == 1>
+                                    <button class="btn btn-info" onclick="assignPermission('${user["username"]}')">
+                                        <#if user.canEdit?exists && user.canEdit == 1>
                                             Release editing permissions
                                         <#else>
                                             Assign editing permissions
                                         </#if>
                                     </button>
-                                    <button class="btn btn-danger" onclick="deleteUser('${userImpl["username"]}')">Delete userImpl</button>
+                                    <button class="btn btn-danger" onclick="deleteUser('${user["username"]}')">Delete user</button>
                                 </td>
                             </tr>
                         </#list>

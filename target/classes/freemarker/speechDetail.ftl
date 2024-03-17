@@ -85,7 +85,7 @@
             border-radius: 8px;
         }
         .button:hover {
-            background-color: #45a049; /* Background color change on mouse hover */
+            background-color: #45a049; /* 鼠标悬停时的背景色变化 */
         }
     </style>
     <script>
@@ -108,7 +108,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify(speech),
                     success: function(response) {
-                        // Actions on success, processing the response returned by the backend as needed
+                        // 在成功后的操作，根据需要处理后端返回的响应
                         if (response && response.code === 0) {
                             messageBox.showSuccess("Update succeed");
                             location.reload();
@@ -117,7 +117,7 @@
                         }
                     },
                     error: function(error) {
-                        // process error
+                        // 处理错误
                         console.log(error);
                     }
                 })

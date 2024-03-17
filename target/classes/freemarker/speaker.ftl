@@ -130,7 +130,7 @@
             border-radius: 8px;
         }
         .button:hover {
-            background-color: #45a049; /* Background color change on mouse hover */
+            background-color: #45a049; /* 鼠标悬停时的背景色变化 */
         }
     </style>
     <script>
@@ -179,7 +179,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify(newSpeaker),
                     success: function(response) {
-                        // Act on success, handling the response returned by the backend as needed
+                        // 在成功后的操作，根据需要处理后端返回的响应
                         if (response && response.code === 0) {
                             messageBox.showSuccess("Update succeed");
                             location.reload();
@@ -197,25 +197,24 @@
             $(".editBtn").on("click", function () {
                 var tr = $(this).closest("tr");
                 speakerId = tr.attr("data-id");
-                // Get speaker object
-                speaker.name = tr.find(".speaker").find("a").text(); // Retrieve the 'name' field
-                speaker.firstName = tr.find(".firstName").text(); // Retrieve the 'firstName' field
-                speaker.title = tr.find(".title").text(); // Retrieve the 'title' field
-                speaker.geburtsdatum = tr.find(".geburtsdatum").text(); // Retrieve the 'geburtsdatum' field (birth date)
-                speaker.geburtsort = tr.find(".geburtsort").text(); // Retrieve the 'geburtsort' field (place of birth)
-                speaker.sterbedatum = tr.find(".sterbedatum").text(); // Retrieve the 'sterbedatum' field (date of death)
-                speaker.geschlecht = tr.find(".geschlecht").text(); // Retrieve the 'geschlecht' field (gender)
-                speaker.beruf = tr.find(".beruf").text(); // Retrieve the 'beruf' field (profession)
-                speaker.akademischertitel = tr.find(".akademischertitel").text(); // Retrieve the 'akademischertitel' field (academic title)
-                speaker.familienstand = tr.find(".familienstand").text(); // Retrieve the 'familienstand' field (marital status)
-                speaker.religion = tr.find(".religion").text(); // Retrieve the 'religion' field
-                speaker.vita = tr.find(".vita").text(); // Retrieve the 'vita' field (biography)
-                speaker.adressing = tr.find(".adressing").text(); // Retrieve the 'adressing' field
-                speaker.party = tr.find(".party").text(); // Retrieve the 'party' field
-                speaker.fraction = tr.find(".fraction").text(); // Retrieve the 'fraction' field
-                speaker.role = tr.find(".role").text(); // Retrieve the 'role' field
+                // 获取speaker对象
+                speaker.name = tr.find(".speaker").find("a").text(); // 获取name字段
+                speaker.firstName = tr.find(".firstName").text(); // 获取firstName字段
+                speaker.title = tr.find(".title").text(); // 获取title字段
+                speaker.geburtsdatum = tr.find(".geburtsdatum").text(); // 获取geburtsdatum字段
+                speaker.geburtsort = tr.find(".geburtsort").text(); // 获取geburtsort字段
+                speaker.sterbedatum = tr.find(".sterbedatum").text(); // 获取sterbedatum字段
+                speaker.geschlecht = tr.find(".geschlecht").text(); // 获取geschlecht字段
+                speaker.beruf = tr.find(".beruf").text(); // 获取beruf字段
+                speaker.akademischertitel = tr.find(".akademischertitel").text(); // 获取akademischertitel字段
+                speaker.familienstand = tr.find(".familienstand").text(); // 获取familienstand字段
+                speaker.religion = tr.find(".religion").text(); // 获取religion字段
+                speaker.vita = tr.find(".vita").text(); // 获取vita字段
+                speaker.adressing = tr.find(".adressing").text(); // 获取adressing字段
+                speaker.party = tr.find(".party").text(); // 获取party字段
+                speaker.fraction = tr.find(".fraction").text(); // 获取fraction字段
+                speaker.role = tr.find(".role").text(); // 获取role字段
                 console.log(speaker);
-
 
                 $("#speakerName").val(tr.find(".speaker").find("a").text());
                 $("#speakerFirstName").val(tr.find(".firstName").text());
@@ -254,7 +253,7 @@
     <input type="text" name="party" id="party" value="" placeholder="Search by Party" />
     <input type="submit" value="Search" />
 </form>
-<#if canEdit?exists && canEdit == 1><button class="button" onclick="showModal('add userImpl')">add speaker</button></#if>
+<#if canEdit?exists && canEdit == 1><button class="button" onclick="showModal('add user')">add speaker</button></#if>
 
 <table>
     <tr>
@@ -300,13 +299,13 @@
         </tr>
     </#list>
 </table>
-<!-- modal box -->
+<!-- 模态框 -->
 <div id="myModal" class="modal">
 
     <div class="modal-content">
         <span class="close" onclick="$('#myModal').hide();$('#speakerDetailForm')[0].reset();">&times;</span>
         <h2 class="modal-title"></h2>
-        <!-- Forms for displaying and modifying data -->
+        <!-- 显示和修改数据的表单 -->
         <form id="speakerDetailForm">
             <input type="hidden" id="_id" name="_id" value="" />
 

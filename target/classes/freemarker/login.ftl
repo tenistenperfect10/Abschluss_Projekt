@@ -76,19 +76,19 @@
         $(document).ready(function () {
             $("#login-form").on('submit', function (e) {
                 e.preventDefault();
-                // Getting form data
+                // 获取表单数据
                 const formData = {
                     username: $('#username').val(),
                     password: $('#password').val(),
                 };
-                // Sending Ajax Requests
+                // 发送 Ajax 请求
                 $.ajax({
-                    url: '/api/login',  // The URL at which the backend receives the request
+                    url: '/api/login',  // 后端接收请求的 URL
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
                     success: function(response) {
-                        // Actions on success, processing the response returned by the backend as needed
+                        // 在成功后的操作，根据需要处理后端返回的响应
                         if (response && response.code === 0) {
                             messageBox.showSuccess("Login succeed");
                             window.open("/", "_self");
@@ -97,7 +97,7 @@
                         }
                     },
                     error: function(error) {
-                        // process error
+                        // 处理错误
                         console.log(error);
                     }
                 });

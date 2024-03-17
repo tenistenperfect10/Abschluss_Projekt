@@ -3,6 +3,7 @@
 <head>
     <title>meeting management</title>
     <#include "common.ftl" />
+    <#setting url_escaping_charset='UTF-8'>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -66,12 +67,12 @@
         }
         .header {
             display: flex;
-            background-color: #ddd; /* gray background */
-            font-weight: bold; /* bold (typeface) */
+            background-color: #ddd; /* 灰色背景 */
+            font-weight: bold; /* 加粗字体 */
             margin-bottom: 10px;
         }
         #directory, .header {
-            width: 70%;
+            width: 80%;
             margin: 0 auto;
             padding: 10px;
         }
@@ -85,14 +86,14 @@
             text-overflow: ellipsis;
             overflow: hidden;
             cursor: pointer;
-            userImpl-select: none;
+            user-select: none;
             font-weight: bold;
         }
         .pdl20 {
             padding-left: 20px;
         }
         .speaker {
-            width: 120px;
+            width: 250px;
         }
         .title {
             width: 200px;
@@ -162,31 +163,40 @@
         .queryLine button:hover {
             background-color: #0056b3;
         }
+        .icon-pdf {
+            position: absolute;
+            right: 0;
+            z-index: 999;
+            color: red;
+        }
     </style>
     <script>
         $(document).ready(function() {
-            $('.folder').next('ul').hide(); // Hide all ul
+            $('.folder').next('ul').hide(); // 隐藏所有的ul
             $("#directory").show();
 
             $('.folder').click(function() {
-                $(this).next('ul').slideToggle();
+                if (event.target.tagName.toLowerCase() !== 'a') {
+                    $(this).next('ul').slideToggle();
+                }
             });
         });
+
         function validateForm() {
             var startTimeStr = document.getElementById('startTime').value;
             var endTimeStr = document.getElementById('endTime').value;
             if (startTimeStr === "" || endTimeStr === "") {
                 alert("Please fill in both start time and end time.");
-                return false; // Blocking Form Submission
+                return false; // 阻止表单提交
             }
             var startTime = new Date(startTimeStr.value);
             var endTime = new Date(endTimeStr.value);
-            // Check if the end time is earlier than the start time
+            // 检查结束时间是否早于开始时间
             if (endTime < startTime) {
                 alert('The start time： ' + startTime + 'cannot be greater than the end time:' + endTime + '!');
                 return false;
             }
-            return true; // Allow form submission
+            return true; // 允许表单提交
         }
     </script>
 </head>
@@ -232,8 +242,8 @@
     <h3>${errorMsg}</h3>
 </#if>
 <div class="header">
-    <span class="speaker pdl20">speaker</span>
-    <span class="title pdl20">title</span>
+    <span class="speaker pdl20">protocol</span>
+    <span class="title pdl20">index</span>
     <span class="startTime pdl20">startTime</span>
     <span class="endTime">endTime</span>
     <span class="place">place</span>
@@ -244,9 +254,8 @@
     <#if speechMap?exists && speechMap?size != 0>
         <ul>
             <#list speechMap?keys as key>
-                <#assign parts = key?split("&")>
                 <li>
-                    <span class="folder speaker">${parts[1]}</span>
+                    <span class="folder speaker" style="position: relative">${key}<a class="fa fa-file-pdf-o icon-pdf" href="/speech/download?protocol=${key?url}"></a></span>
                     <ul>
                         <#assign titleMap = speechMap[key]>
                         <#list titleMap?keys as subKey>

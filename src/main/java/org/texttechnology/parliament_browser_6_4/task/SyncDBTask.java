@@ -1,8 +1,7 @@
 package org.texttechnology.parliament_browser_6_4.task;
-
-import com.alibaba.fastjson.JSON;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import org.json.JSONObject;
 import org.texttechnology.parliament_browser_6_4.data.Member;
 import org.texttechnology.parliament_browser_6_4.helper.FileUtils;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBUtils;
@@ -22,7 +21,7 @@ import java.io.IOException;
 public class SyncDBTask {
     // Collection in MongoDB to store Member documents
 
-    private static MongoCollection<Document> abgeordnter = MongoDBUtils.getCollection("Abgeordnter");
+    private static MongoCollection<Document> abgeordnter = MongoDBUtils.getCollection("Abgeordneter");
 
     /**
      * Unzips the specified XML data file for processing.
@@ -52,7 +51,16 @@ public class SyncDBTask {
             Node node = nodeList.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Member member = MdbParser.parseMember(node);
-                org.bson.Document document = org.bson.Document.parse(JSON.toJSONString(member));
+                JSONObject jsonObject = new JSONObject();
+                //jsonObject.put("id",member.getId());
+                jsonObject.put("vorname",member.getVorName());
+                jsonObject.put("nachname",member.getNachName());
+                jsonObject.put("ortszusatz",member.getOrtszusatz());
+                jsonObject.put("anredetitle",member.getAnredeTitle());
+                jsonObject.put("akadtitle",member.getAkadTitle());
+                jsonObject.put("memberImgList",member.getMemberImgList());
+
+                org.bson.Document document = org.bson.Document.parse(jsonObject.toString());
                 document.append("_id", member.getId());
                 MongoDBUtils.insertDocument(abgeordnter, document);
             }

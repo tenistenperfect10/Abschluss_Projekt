@@ -79,16 +79,33 @@
     </style>
     <script>
         $(document).ready(function () {
+
+            $('#key_box').hide();
+
+            $('input[name="userType"]').change(function () {
+                var userType = $(this).val();
+                if (userType === '1') {
+                    $('#key_box').show();
+                } else {
+                    $('#key_box').hide();
+                }
+            });
+
             $("#register-form").on('submit', function (e) {
                 e.preventDefault();
 
-                // Getting form data
+                // 获取表单数据
                 var username = $('#username').val();
                 var password = $('#password').val();
                 var confirm_password = $('#confirm_password').val();
                 var userType = $('input[name="userType"]:checked').val(); // 获取选中的用户类型
+                var verifyCode = $("#confirm_key").val();
+                if (userType == 1 && verifyCode.length === 0) {
+                    messageBox.showError('Please enter your secret key.');
+                    return;
+                }
 
-                // Client-side validation logic
+                // 客户端验证逻辑
                 if (username.length < 4) {
                     messageBox.showError('The username must have at least 4 characters.');
                     return;
@@ -104,18 +121,19 @@
                     return;
                 }
 
-                // Sending Ajax Requests
+                // 发送 Ajax 请求
                 $.ajax({
-                    url: '/api/register',  // The URL where the backend receives the registration request
+                    url: '/api/register',  // 后端接收注册请求的 URL
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        'username': username,
-                        'password': password,
-                        'userType': userType,
+                        username,
+                        password,
+                        userType,
+                        verifyCode,
                     }),
                     success: function(response) {
-                        // Logic to handle successful registration
+                        // 处理注册成功的逻辑
                         if (response && response.code === 0) {
                             messageBox.showSuccess("Register succeed");
                             window.open("/login", "_self");
@@ -124,7 +142,7 @@
                         }
                     },
                     error: function(error) {
-                        // Logic for handling registration failures
+                        // 处理注册失败的逻辑
                         messageBox.showError('Register failed');
                     }
                 });
@@ -150,6 +168,10 @@
                 <div class="mb-3">
                     <label for="confirm_password" class="form-label">Confirm Password</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                </div>
+                <div class="mb-3" id="key_box">
+                    <label for="confirm_key" class="form-label">Your Secret Key</label>
+                    <input type="text" class="form-control" id="confirm_key" name="confirm_key">
                 </div>
                 <div class="mb-3" style="display: flex; margin-bottom: 20px;">
                     <div class="form-check form-check-inline" style="margin-right: 20px;">

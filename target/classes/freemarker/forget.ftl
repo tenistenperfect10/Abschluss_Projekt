@@ -73,12 +73,12 @@
             $("#forgot-password-form").on('submit', function (e) {
                 e.preventDefault();
 
-                // Getting form data
+                // 获取表单数据
                 var username = $('#username').val();
                 var newPassword = $('#new_password').val();
                 var confirmNewPassword = $('#confirm_new_password').val();
 
-                // Client-side validation logic
+                // 客户端验证逻辑
                 if (!username) {
                     messageBox.showError('Please enter username.');
                     return;
@@ -94,9 +94,9 @@
                     return;
                 }
 
-                // Sending Ajax Requests
+                // 发送 Ajax 请求
                 $.ajax({
-                    url: '/api/updatePwd',  // The URL where the backend receives the forgotten password request
+                    url: '/api/updatePwd',  // 后端接收忘记密码请求的 URL
                     type: 'POST',
                     data: {
                         username,
@@ -104,7 +104,7 @@
                         confirmNewPassword,
                     },
                     success: function (response) {
-                        // Logic for processing a successful request
+                        // 处理请求成功的逻辑
                         console.log(response);
                         if (response && response.code === 0) {
                             messageBox.showSuccess('Succeed! Please login.');
@@ -113,7 +113,7 @@
                         }
                     },
                     error: function (error) {
-                        // Logic for handling failed requests
+                        // 处理请求失败的逻辑
                         messageBox.showError(error);
                     }
                 });
