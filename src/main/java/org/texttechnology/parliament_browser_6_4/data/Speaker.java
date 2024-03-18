@@ -3,8 +3,11 @@ package org.texttechnology.parliament_browser_6_4.data;
 import java.util.Date;
 import java.util.Set;
 
-public interface Speaker extends PlenaryObject{
-
+/**
+ * Interface for mapping speakers
+ * @author Giuseppe Abrami
+ */
+public interface Speaker extends PlenaryObject {
 
     /**
      * Return the party of the speaker
@@ -108,7 +111,17 @@ public interface Speaker extends PlenaryObject{
      */
     float getAvgLength();
 
+    /**
+     * Return true if the speaker is a leader of a Session
+     * @return
+     */
+    boolean isLeader();
 
+    /**
+     * Return true if the speaker is part of the Government
+     * @return
+     */
+    boolean isGovernment();
 
     /**
      * Return the Sessions where a speaker was absence

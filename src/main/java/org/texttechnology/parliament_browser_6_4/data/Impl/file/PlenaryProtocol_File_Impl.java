@@ -1,10 +1,10 @@
-package org.texttechnology.parliament_browser_6_4.data.Impl;
+package org.texttechnology.parliament_browser_6_4.data.Impl.file;
 
-import org.jetbrains.annotations.NotNull;
 import org.texttechnology.parliament_browser_6_4.data.*;
 import org.texttechnology.parliament_browser_6_4.exception.InputException;
 import org.texttechnology.parliament_browser_6_4.helper.StringHelper;
 import org.texttechnology.parliament_browser_6_4.helper.XMLHelper;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -23,16 +23,21 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryProtocol {
+/**
+ * Implementation of a plenary protocol
+ * @author
+ */
+public class PlenaryProtocol_File_Impl extends PlenaryObject_File_Impl implements PlenaryProtocol {
+
 
     // The DOM document is stored
     private Document pDocument = null;
 
     // variable declaration
     private int iIndex = -1;
-    private Date pDate = null;
-    private Timestamp pStartTime = null;
-    private Timestamp pEndTime = null;
+    private Date pDate = null;//关于这里为什么要设置private：可能是担心别的地方也有这个变量最后导致变量重复
+    private Time pStartTime = null;
+    private Time pEndTime = null;
     private String sTitle = "";
     private String sPlace = "";
 
@@ -42,17 +47,12 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
 
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-
-    public PlenaryProtocol_Impl(InsightFactory pFactory){
-        super(pFactory);
-    }
-
     /**
      * Constuctor. The constructor needs a ParliamentFactory and the file of the plenary protocol
      * @param pFactory
      * @param pFile
      */
-    public PlenaryProtocol_Impl(InsightFactory pFactory, File pFile){
+    public PlenaryProtocol_File_Impl(InsightFactory pFactory, File pFile){
         super(pFactory);
         try {
             init(pFile);
@@ -92,16 +92,7 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
         this.setWahlperiode(Integer.valueOf(nWahlperiode.getTextContent()));
 
         Node nSitzungsnummer = getNodeFromXML(pDocument, "sitzungsnr");
-        int iSitzungsnummer = -1;
-
-        try {
-            iSitzungsnummer = Integer.valueOf(nSitzungsnummer.getTextContent());
-        }
-        catch (NumberFormatException nfe){
-            iSitzungsnummer = Integer.valueOf(nSitzungsnummer.getTextContent().split(" ")[0]);
-        }
-
-        this.setIndex(iSitzungsnummer);
+        this.setIndex(Integer.valueOf(nSitzungsnummer.getTextContent()));
 
         Node nTitle = getNodeFromXML(pDocument, "plenarprotokoll-nummer");
         this.setTitle(nTitle.getTextContent());
@@ -144,26 +135,6 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
                 System.err.println(peFinal.getMessage());
             }
         }
-        if(pEndTime!=null) {
-            this.setEndTime(pEndTime);
-        }
-        else{
-            this.setEndTime(pStartTime);
-        }
-
-        pStartTime = new Time(this.getDate().getTime()+this.getStartTime().getTime());
-
-        if(this.getEndTime().before(this.getStartTime())){
-            Calendar pCalender = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
-            pCalender.setTime(this.getDate());
-            pCalender.add(Calendar.DAY_OF_YEAR, 1);
-            pEndTime = new Time(pCalender.getTime().getTime()+this.getEndTime().getTime());
-        }
-        else{
-            pEndTime = new Time(this.getDate().getTime()+this.getEndTime().getTime());
-        }
-
-        this.setStarttime(pStartTime);
         this.setEndTime(pEndTime);
 
         // Processing AgendaIgems
@@ -172,7 +143,7 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
         for(int b=0; b<pBlocks.getLength(); b++){
             Node n = pBlocks.item(b);
 
-            AgendaItem pItem = new AgendaItem_Impl(this, n);
+            AgendaItem pItem = new AgendaItem_File_Impl(this, n);
             if(pItem.getSpeeches().size()>0){
                 this.addAgendaItem(pItem);
             }
@@ -188,7 +159,6 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
             Node pNode = XMLHelper.getSingleNodesFromXML(pAnlagen.item(0), "table");
 
             if(pNode!=null) {
-
                 List<Node> trNodes = XMLHelper.getNodesFromXML(pNode, "tr");
 
                 for (Node trNode : trNodes) {
@@ -209,13 +179,13 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
 
                             String finalFirstName = firstName;
                             String finalLastName = lastName;
-                           // Set<Speaker> speakerSet = this.getFactory().getSpeakers().stream().filter(s -> {
-                              //  return s.getName().equalsIgnoreCase(finalLastName) && s.getFirstName().equalsIgnoreCase(finalFirstName);
-                            //}).collect(Collectors.toSet());
+                            Set<Speaker> speakerSet = this.getFactory().getSpeakers().stream().filter(s -> {
+                                return s.getName().equalsIgnoreCase(finalLastName) && s.getFirstName().equalsIgnoreCase(finalFirstName);
+                            }).collect(Collectors.toSet());
 
-                           // speakerSet.forEach(pSpeaker -> {
-                             //   pSpeaker.addAbsense(this);
-                            //});
+                            speakerSet.forEach(pSpeaker -> {
+                                pSpeaker.addAbsense(this);
+                            });
 
 
                         }
@@ -228,8 +198,16 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
         }
 
 
+    }
 
+    /**
+     *
+     */
+    public void setupAbsense(){
+        // Processing anlagen
+        NodeList pAnlagen = pDocument.getElementsByTagName("anlagen");
 
+        addAbsences(pAnlagen);
 
     }
 
@@ -248,195 +226,107 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
      * @return
      */
     private Node getNodeFromXML(Document pDocument, String sTag){
-        return pDocument.getElementsByTagName(sTag).item(0);
+        return pDocument.getElementsByTagName(sTag).item(0);//不创建方法 直接用这个函数
     }
 
-    /**
-     * Return the sequence number fo the protocol
-     *
-     * @return
-     */
     @Override
     public int getIndex() {
-        return 0;
+        return this.iIndex;
     }
 
-    /**
-     * Set the sequence number fo the protocol
-     *
-     * @param iValue
-     */
     @Override
     public void setIndex(int iValue) {
-
+        this.iIndex = iValue;
     }
 
-    /**
-     * Return the date of the protocol
-     *
-     * @return
-     */
     @Override
     public Date getDate() {
-        return null;
+        return this.pDate;
     }
 
-    /**
-     * Return the formated Date
-     *
-     * @return
-     */
     @Override
     public String getDateFormated() {
-        return null;
+        return dateFormat.format(getDate());
     }
 
-    /**
-     * Set the date of the protocol
-     *
-     * @param pDate
-     */
     @Override
     public void setDate(Date pDate) {
-
+        this.pDate = pDate;
     }
 
-    /**
-     * Return the start time of the protocol
-     *
-     * @return
-     */
     @Override
-    public Timestamp getStartTime() {
-        return null;
+    public Time getStartTime() {
+        return this.pStartTime;
     }
 
-    /**
-     * Return the start time formated
-     *
-     * @return
-     */
     @Override
     public String getStartTimeFormated() throws InputException {
-        return null;
+        if(getStartTime()!=null) {
+            return timeFormat.format(getStartTime())+" Uhr";
+        }
+        throw new InputException("not valid time");
     }
 
-    /**
-     * Set the start time of the protocol
-     *
-     * @param pTime
-     */
     @Override
     public void setStarttime(Time pTime) {
-
+        this.pStartTime = pTime;
     }
 
-    /**
-     * Return the end time of the protocol
-     *
-     * @return
-     */
     @Override
-    public Timestamp getEndTime() {
-        return null;
+    public Time getEndTime() {
+        return this.pEndTime;
     }
 
-    /**
-     * Return the end time formated
-     *
-     * @return
-     */
     @Override
     public String getEndTimeFormated() throws InputException {
-        return null;
+        if(getEndTime()!=null) {
+            return timeFormat.format(getEndTime())+" Uhr";
+        }
+        throw new InputException("not valid time");
     }
 
-    /**
-     * Set the end time of the protocol
-     *
-     * @param pTime
-     */
     @Override
     public void setEndTime(Time pTime) {
-
+        this.pEndTime = pTime;
     }
 
-    /**
-     * Return the title of the protocol
-     *
-     * @return
-     */
     @Override
     public String getTitle() {
-        return null;
+        return this.sTitle;
     }
 
-    /**
-     * Set the title of the protocol
-     *
-     * @param sValue
-     */
     @Override
     public void setTitle(String sValue) {
-
+        this.sTitle = sValue;
     }
 
-    /**
-     * Return the agenda items of the protocol
-     *
-     * @return
-     */
     @Override
     public List<AgendaItem> getAgendaItems() {
-        return null;
+        return this.pAgendaItems;
     }
 
-    /**
-     * Add a agenda item
-     *
-     * @param pItem
-     */
     @Override
     public void addAgendaItem(AgendaItem pItem) {
-
+        this.pAgendaItems.add(pItem);
     }
 
-    /**
-     * Add multiple agenda items
-     *
-     * @param pSet
-     */
     @Override
     public void addAgendaItems(Set<AgendaItem> pSet) {
-
+        pSet.forEach(i->{
+            this.addAgendaItem(i);
+        });
     }
 
-    /**
-     * Return the place of the protocol
-     *
-     * @return
-     */
     @Override
     public String getPlace() {
-        return null;
+        return this.sPlace;
     }
 
-    /**
-     * Set the place of the protocol
-     *
-     * @param sValue
-     */
     @Override
     public void setPlace(String sValue) {
-
+        this.sPlace = sValue;
     }
 
-
-    /**
-     * Return a list of speakers of the protocol
-     *
-     * @return
-     */
     @Override
     public Set<Speaker> getSpeakers() {
         Set<Speaker> rSet = new HashSet<>(0);
@@ -448,6 +338,78 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
         });
 
         return rSet;
+    }
+
+    @Override
+    public Set<Speaker> getSpeakers(Party pParty) {
+        return getSpeakers().stream().filter(s->s.getParty().equals(pParty)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Speaker> getSpeakers(Fraction pFraction) {
+        return getSpeakers().stream().filter(s->{
+            try {
+                return s.getFraction().equals(pFraction);
+            }
+            catch (NullPointerException npe){
+
+            }
+            return false;
+        }).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Speaker> getLeaders() {
+
+        /*
+         * Search all agenda items, in their speech, who interrupted a speech and if they are a president.
+         */
+        Set<Speaker> rSet = new HashSet<>(0);
+        this.getAgendaItems().forEach(ai->{
+            ai.getSpeeches().forEach(s->{
+                s.getInsertions().forEach(i->{
+                    if(i.getSpeaker().isLeader()){
+                        rSet.add(i.getSpeaker());
+                    }
+                });
+            });
+        });
+
+        return rSet;
+    }
+
+    @Override
+    public long getDuration() {
+
+        long pTime = -1l;
+
+        if(this.getEndTime()==null || this.getStartTime()==null){
+            return pTime;
+        }
+
+        if(this.getEndTime().before(this.getStartTime())){
+            Calendar pCalender = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+            pCalender.setTime(this.getEndTime());
+            pCalender.add(Calendar.DAY_OF_YEAR, 1);
+            pTime = Math.abs(pCalender.getTime().getTime() - getStartTime().getTime());
+        }
+        else{
+            pTime = Math.abs(getEndTime().getTime() - getStartTime().getTime());
+        }
+
+
+
+
+
+        return pTime;
+    }
+
+    @Override
+    public String getDurationFormated(){
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date pDate = new Date(getDuration());
+        return timeFormat.format(pDate);
     }
 
     @Override
@@ -469,46 +431,10 @@ public class PlenaryProtocol_Impl extends PlenaryObject_Impl implements PlenaryP
         return this.getIndex();
     }
 
-
-
     /**
-     * Compares this object with the specified object for order.  Returns a
-     * negative integer, zero, or a positive integer as this object is less
-     * than, equal to, or greater than the specified object.
-     *
-     * <p>The implementor must ensure
-     * {@code sgn(x.compareTo(y)) == -sgn(y.compareTo(x))}
-     * for all {@code x} and {@code y}.  (This
-     * implies that {@code x.compareTo(y)} must throw an exception iff
-     * {@code y.compareTo(x)} throws an exception.)
-     *
-     * <p>The implementor must also ensure that the relation is transitive:
-     * {@code (x.compareTo(y) > 0 && y.compareTo(z) > 0)} implies
-     * {@code x.compareTo(z) > 0}.
-     *
-     * <p>Finally, the implementor must ensure that {@code x.compareTo(y)==0}
-     * implies that {@code sgn(x.compareTo(z)) == sgn(y.compareTo(z))}, for
-     * all {@code z}.
-     *
-     * <p>It is strongly recommended, but <i>not</i> strictly required that
-     * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
-     * class that implements the {@code Comparable} interface and violates
-     * this condition should clearly indicate this fact.  The recommended
-     * language is "Note: this class has a natural ordering that is
-     * inconsistent with equals."
-     *
-     * <p>In the foregoing description, the notation
-     * {@code sgn(}<i>expression</i>{@code )} designates the mathematical
-     * <i>signum</i> function, which is defined to return one of {@code -1},
-     * {@code 0}, or {@code 1} according to whether the value of
-     * <i>expression</i> is negative, zero, or positive, respectively.
-     *
-     * @param plenaryObject the object to be compared.
-     * @return a negative integer, zero, or a positive integer as this object
-     * is less than, equal to, or greater than the specified object.
-     * @throws NullPointerException if the specified object is null
-     * @throws ClassCastException   if the specified object's type prevents it
-     *                              from being compared to this object.
+     * Special compareTo method
+     * @param plenaryObject
+     * @return
      */
     @Override
     public int compareTo(PlenaryObject plenaryObject) {

@@ -1,7 +1,6 @@
 package org.texttechnology.parliament_browser_6_4.data.Impl;
 
 import org.bson.Document;
-import org.texttechnology.parliament_browser_6_4.data.Impl.Speech_Impl;
 import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
 import org.texttechnology.parliament_browser_6_4.data.Speech_mongoDB;
 

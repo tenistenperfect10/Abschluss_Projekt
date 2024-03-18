@@ -67,8 +67,8 @@
         }
         .header {
             display: flex;
-            background-color: #ddd; /* 灰色背景 */
-            font-weight: bold; /* 加粗字体 */
+            background-color: #ddd; /* Grey background */
+            font-weight: bold; /* bold (typeface) */
             margin-bottom: 10px;
         }
         #directory, .header {
@@ -172,7 +172,7 @@
     </style>
     <script>
         $(document).ready(function() {
-            $('.folder').next('ul').hide(); // 隐藏所有的ul
+            $('.folder').next('ul').hide(); //  Hide all ul
             $("#directory").show();
 
             $('.folder').click(function() {
@@ -187,16 +187,16 @@
             var endTimeStr = document.getElementById('endTime').value;
             if (startTimeStr === "" || endTimeStr === "") {
                 alert("Please fill in both start time and end time.");
-                return false; // 阻止表单提交
+                return false; // Blocking Form Submission
             }
             var startTime = new Date(startTimeStr.value);
             var endTime = new Date(endTimeStr.value);
-            // 检查结束时间是否早于开始时间
+            // Check if the end time is earlier than the start time
             if (endTime < startTime) {
                 alert('The start time： ' + startTime + 'cannot be greater than the end time:' + endTime + '!');
                 return false;
             }
-            return true; // 允许表单提交
+            return true; // Allow form submission
         }
     </script>
 </head>

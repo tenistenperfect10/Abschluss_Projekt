@@ -2,13 +2,18 @@ package org.texttechnology.parliament_browser_6_4.data;
 
 import org.texttechnology.parliament_browser_6_4.exception.InputException;
 
+
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
-public interface PlenaryProtocol extends PlenaryObject{
+/**
+ * Interface for mapping a plenary protocol.
+ * @author Giuseppe Abrami
+ */
+public interface PlenaryProtocol extends PlenaryObject {
 
     /**
      * Return the sequence number fo the protocol
@@ -44,7 +49,7 @@ public interface PlenaryProtocol extends PlenaryObject{
      * Return the start time of the protocol
      * @return
      */
-    Timestamp getStartTime();
+    Time getStartTime();
 
 
     /**
@@ -63,7 +68,7 @@ public interface PlenaryProtocol extends PlenaryObject{
      * Return the end time of the protocol
      * @return
      */
-    Timestamp getEndTime();
+    Time getEndTime();
 
     /**
      * Return the end time formated
@@ -125,7 +130,35 @@ public interface PlenaryProtocol extends PlenaryObject{
      */
     Set<Speaker> getSpeakers();
 
+    /**
+     * Return a list of speakers of the protocol based on a Party
+     * @param pParty
+     * @return
+     */
+    Set<Speaker> getSpeakers(Party pParty);
 
+    /**
+     * Return a list of speakers of the protocol based on a fraction
+     * @param pFraction
+     * @return
+     */
+    Set<Speaker> getSpeakers(Fraction pFraction);
 
+    /**
+     * Return a list of
+     * @return
+     */
+    Set<Speaker> getLeaders();
 
+    /**
+     * Return the Duration of the Session
+     * @return
+     */
+    long getDuration();
+
+    /**
+     * Return the Duration in a formatted way
+     * @return
+     */
+    String getDurationFormated();
 }

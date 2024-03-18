@@ -1,6 +1,10 @@
 package org.texttechnology.parliament_browser_6_4.data;
 
-public interface PlenaryObject extends Comparable<PlenaryObject>{
+/**
+ * Central interface which inherits from Comparable.
+ * @author Giuseppe Abrami
+ */
+public interface PlenaryObject extends Comparable<PlenaryObject> {
 
     /**
      * Return the ID of the Object

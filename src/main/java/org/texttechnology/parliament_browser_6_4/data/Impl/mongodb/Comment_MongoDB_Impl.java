@@ -13,7 +13,8 @@ import org.bson.Document;
 import org.hucompute.textimager.uima.type.Sentiment;
 import org.texttechnology.parliament_browser_6_4.data.CasProcesser;
 import org.texttechnology.parliament_browser_6_4.data.Comment;
-import org.texttechnology.parliament_browser_6_4.data.Impl.Comment_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.file.Comment_File_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.file.Text_File_Impl;
 import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
 
 import org.w3c.dom.Node;
@@ -21,18 +22,11 @@ import org.w3c.dom.Node;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Comment_MongoDB_Impl extends Comment_Impl implements Comment, CasProcesser {
+public class Comment_MongoDB_Impl extends Text_File_Impl implements Comment, CasProcesser {
 
     private JCas jCas = null;
     private Document doc = null;
-    /**
-     * Constructor based on a Node, calling the super-constructor
-     *
-     * @param pNode
-     */
-    public Comment_MongoDB_Impl(Node pNode) {
-        super(pNode);
-    }
+
 
     public Comment_MongoDB_Impl(InsightFactory fac, Document doc){
         super(fac);

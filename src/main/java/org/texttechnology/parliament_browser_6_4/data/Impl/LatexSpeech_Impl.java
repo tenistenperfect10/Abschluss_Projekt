@@ -1,7 +1,6 @@
 package org.texttechnology.parliament_browser_6_4.data.Impl;
 
 import org.texttechnology.parliament_browser_6_4.data.LatexSpeech;
-import org.texttechnology.parliament_browser_6_4.data.Speech;
 import org.texttechnology.parliament_browser_6_4.data.Speech_mongoDB;
 
 import java.util.List;

@@ -7,18 +7,20 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.texttechnology.parliament_browser_6_4.data.Comment;
-import org.texttechnology.parliament_browser_6_4.data.Impl.mongodb.Comment_MongoDB_Impl;
-import org.texttechnology.parliament_browser_6_4.data.Impl.mongodb.Speech_MongoDB_Impl;
-import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
-import org.texttechnology.parliament_browser_6_4.data.Speaker;
-import org.texttechnology.parliament_browser_6_4.data.Speech;
+import org.texttechnology.parliament_browser_6_4.data.*;
+import org.texttechnology.parliament_browser_6_4.data.Impl.file.Fraction_File_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.file.Party_File_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.file.Speaker_File_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.file.Speaker_Plain_File_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.mongodb.*;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBConfig;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBConnectionHandler;
 import org.texttechnology.parliament_browser_6_4.helper.NLPHelper;
+import org.w3c.dom.Node;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Aggregates.match;
 import static com.mongodb.client.model.Filters.eq;
@@ -47,12 +49,193 @@ public class InsightFactory_Impl implements InsightFactory {
 
     private NLPHelper nlpHelper = null;
 
+    // Variables for storing the protocol informations
+    private Set<Speaker> pSpeaker = new HashSet<>();
+    private Set<PlenaryProtocol> pProtocols = new HashSet<>();
+    private Set<Fraction> pFractions = new HashSet<>();
+    private Set<Party> pParties = new HashSet<>();
+
+    private Set<Speech> pSpeeches = new HashSet<>();
+
+    /**
+     * Default constructor
+     */
+    @Override
+    public Set<Speaker> getSpeakers(){
+        return this.pSpeaker;
+    }
+
+    @Override
+    public Set<Speech> getpSpeeches() {
+        return this.pSpeeches;
+    }
+
+    @Override
+    public void addSpeeches(Speech speech) {
+        pSpeeches.add(speech);
+
+    }
+
+    @Override
+    public Set<Speaker> getSpeakers(Fraction pFraction) {
+        return this.getSpeakers().stream().filter(s->{
+            if(s.getFraction()!=null) {
+                return s.getFraction().equals(pFraction);
+            }
+            return false;
+        }).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<PlenaryProtocol> getProtocols(){
+        return this.pProtocols;
+    }
+
+    @Override
+    public Set<PlenaryProtocol> getProtocols(int iWP) {
+        return getProtocols().stream().filter(p->p.getWahlperiode()==iWP).collect(Collectors.toSet());
+    }
+
+    @Override
+    public void addProtocol(PlenaryProtocol pProtocol) {
+        this.pProtocols.add(pProtocol);
+    }
+
+    @Override
+    public Set<Fraction> getFractions(){
+        return pFractions;
+    }
+
+    @Override
+    public Set<Party> getParties(){
+        return this.pParties;
+    }
+
+    @Override
+    public Party getParty(String sName) {
+
+        List<Party> sList = this.getParties().stream().filter(s->s.getName().equalsIgnoreCase(sName)).collect(Collectors.toList());
+
+        if(sList.size()==1){
+            return sList.get(0);
+        }
+        else{
+            Party pParty = new Party_File_Impl(sName);
+            this.pParties.add(pParty);
+            return pParty;
+        }
+
+    }
+
+    @Override
+    public Speaker getSpeaker(String sId) {
+
+        List<Speaker> sList = this.getSpeakers().stream().filter(s->s.getID().equals(sId)).collect(Collectors.toList());
+
+        if(sList.size()==1){
+            return sList.get(0);
+        }
+
+        return null;
+
+    }
+
+    @Override
+    public void addspeaker(Speaker pSpeaker){
+        this.pSpeaker.add(pSpeaker);
+    }
+
+    public Speaker getSpeakerByName(String sValue){
+
+        List<Speaker> sList = this.getSpeakers().stream().filter(s->{
+            return s.getName().equalsIgnoreCase(Speaker_Plain_File_Impl.transform(sValue));
+        }).collect(Collectors.toList());
+
+        if(sList.size()==1){
+            return sList.get(0);
+        }
+        return null;
+
+    }
+
+    @Override
+    public Speaker getSpeaker(Node pNode) {
+
+        Speaker pSpeaker = null;
+
+        // if speaker is a complex node
+        if(!pNode.getNodeName().equalsIgnoreCase("name")){
+            String sID = pNode.getAttributes().getNamedItem("id").getTextContent();
+
+            pSpeaker= getSpeaker(sID);
+
+            if(pSpeaker==null){
+                Speaker_File_Impl nSpeaker = new Speaker_File_Impl(this, pNode);
+                this.pSpeaker.add(nSpeaker);
+                pSpeaker = nSpeaker;
+            }
+        }
+        // if not...
+        else{
+            pSpeaker = getSpeakerByName(pNode.getTextContent());
+
+            if(pSpeaker==null){
+                Speaker_Plain_File_Impl plainSpeaker = new Speaker_Plain_File_Impl(this);
+                plainSpeaker.setName(pNode.getTextContent());
+
+                this.pSpeaker.add(plainSpeaker);
+                pSpeaker = plainSpeaker;
+            }
+
+        }
+
+        return pSpeaker;
+    }
+
+    @Override
+    public Fraction getFraction(String sName) {
+        /*
+         * search in fractions if there is a fraction with this name?
+         * Attention: Since in Bündnis 90/Die Grünen partly other characters are used, here a small trick is used and
+         * not checked for the simultaneity of the name of the faction but only for their same beginning.
+         */
+        List<Fraction> sList = this.getFractions().stream().filter(s->{
+            if(s.getName().startsWith(sName.substring(0, 3))){
+                return true;
+            }
+            return s.getName().equalsIgnoreCase(sName.trim());
+        }).collect(Collectors.toList());
+
+        if(sList.size()==1){
+            return sList.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Fraction getFraction(Node pNode) {
+        String sName = pNode.getTextContent();
+
+        Fraction pFraction = getFraction(sName);
+
+        if(pFraction==null){
+            // if fraction not exist, create
+            pFraction = new Fraction_File_Impl(pNode);
+
+            this.pFractions.add(pFraction);
+        }
+
+        return pFraction;
+    }
+
     public InsightFactory_Impl(MongoDBConnectionHandler dbConnectionHandler){
         this.dbConnectionHandler = dbConnectionHandler;
     }
 
 
     public InsightFactory_Impl() throws Exception {
+
         this.nlpHelper = new NLPHelper();
     }
 
@@ -84,6 +267,9 @@ public class InsightFactory_Impl implements InsightFactory {
      */
     @Override
     public void addSpeech(Speech pSpeech) {
+        this.dbConnectionHandler.insertSpeech(pSpeech);
+        addSpeaker(pSpeech.getSpeaker());
+
 
     }
 
@@ -95,6 +281,8 @@ public class InsightFactory_Impl implements InsightFactory {
     @Override
     public void addComment(Comment pComment) {
 
+        this.dbConnectionHandler.insertComment(pComment);
+
     }
 
     /**
@@ -104,6 +292,8 @@ public class InsightFactory_Impl implements InsightFactory {
      */
     @Override
     public void addSpeaker(Speaker pSpeaker) {
+
+        this.dbConnectionHandler.insertSpeaker(pSpeaker);
 
     }
 
@@ -116,7 +306,6 @@ public class InsightFactory_Impl implements InsightFactory {
         });
         return sList;
     }
-
     @Override
     public List<Comment> getComments() {
         List<Comment> cList = new ArrayList<>(0);

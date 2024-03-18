@@ -18,9 +18,9 @@ public class LatexBuilder {
         if (!directory.exists()) {
             boolean created = directory.mkdirs();
             if (created) {
-                System.out.println(path + "目录创建成功");
+                System.out.println(path + "Directory created successfully");
             } else {
-                System.out.println(path + "目录创建失败");
+                System.out.println(path + "Directory creation failure");
             }
         }
     }
@@ -35,37 +35,37 @@ public class LatexBuilder {
 
         latexCode.append("% !TeX encoding = UTF-8\n");
 
-        // 添加依赖
+        // Adding Dependencies
         latexCode.append("\\documentclass{article}\n");
-        // 处理特殊符号
+        // Handling of special symbols
 //        latexCode.append("\\newcommand{\\myescape}[1]{\\string#1}\n");
         latexCode.append("\\usepackage[T1]{fontenc}\n");
 
         latexCode.append("\\usepackage[utf8]{inputenc}\n");
         latexCode.append("\\DeclareUnicodeCharacter{202F}{\\,}\n");
 
-        // 添加所需的包
+        // Add the required packages
         latexCode.append("\\usepackage{graphicx}\n");
         latexCode.append("\\usepackage[ngerman]{babel}\n");
         latexCode.append("\\usepackage{hyperref}\n");
         latexCode.append("\\usepackage{enumitem}\n");
-        // 设置hyperref的属性
+        // Setting properties of hyperref
         latexCode.append("\\hypersetup{colorlinks=true, linkcolor=black}\n");
 
 
         latexCode.append("\\setlist[itemize]{topsep=-5pt}\n");
 
-        // 开始文档内容
+        // Start document content
         latexCode.append("\\begin{document}\n");
     }
 
     private void makeHeader(LatexSpeech latexSpeech) {
         latexCode.append("\\title{" + latexSpeech.getTitle() + "}\n");
-        // 去除自带日期
+        // Remove Self-Date
         latexCode.append("\\date{}\n");
         latexCode.append("\\maketitle\n");
 
-        // 添加目录
+        // Add an index
         latexCode.append("\\tableofcontents\n");
         latexCode.append("\\newpage\n");
     }
@@ -77,12 +77,12 @@ public class LatexBuilder {
             speechList.forEach(speech -> {
                 latexCode.append("\\subsection{" + speech.getSpeaker() + "}\n");
                 latexCode.append("\\noindent\\textbf{Texts:} " + StringUtils.escapeSpecialCharacters(speech.getText()) + "\n");
-                latexCode.append("\n"); // 添加一个换行符
+                latexCode.append("\n"); // Add a line break
                 if (speech.getComments().size() > 0) {
                     latexCode.append("\\noindent\\textbf{Comment:}\n");
                     latexCode.append("\\begin{itemize}\n");
                     for (String comment : speech.getComments()) {
-                        latexCode.append("    \\setlength\\itemsep{-3pt}\n"); // 减小item之间的间距
+                        latexCode.append("    \\setlength\\itemsep{-3pt}\n"); // Reduce the spacing between items
                         latexCode.append("    \\item " + comment + "\n");
                     }
                     latexCode.append("\\end{itemize}\n");
@@ -99,21 +99,21 @@ public class LatexBuilder {
         generateLatexFile(latexSpeech);
         generatePdf(latexSpeech);
         String filePrefix = generatePdf(latexSpeech);
-        // 结束文档内容
+        // End document content
         return filePrefix + ".pdf";
     }
 
     public void generateLatexFile(LatexSpeech latexSpeech) {
-        // 确定 LaTeX 文件路径
+        // Determine the path to the LaTeX file
         String filePrefix = latexSpeech.getTitle().replaceAll(" ", "").replaceAll("/", "-").trim();
         String outputFilePath = latexDirectoryPath + File.separator + filePrefix + ".tex";
 
-        // 将 LaTeX 代码写入文件
+        // Writing LaTeX code to a file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
             writer.write(latexCode.toString());
-            System.out.println("LaTeX 代码成功写入文件：" + outputFilePath);
+            System.out.println("LaTeX code successfully written to file：" + outputFilePath);
         } catch (IOException e) {
-            System.out.println("写入 LaTeX 代码时出现错误：" + e.getMessage());
+            System.out.println("An error occurs when writing LaTeX code:" + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -124,48 +124,48 @@ public class LatexBuilder {
 
 
         try {
-            // 创建 ProcessBuilder 对象
+            // Creating ProcessBuilder Objects
             ProcessBuilder processBuilder = new ProcessBuilder(pdflatexCommand.split(" "));
-            processBuilder.directory(new File("src/main/resources/latex")); // 设置工作目录为 LaTeX 文件所在目录
-            processBuilder.redirectErrorStream(true); // 将错误流合并到标准输出流
+            processBuilder.directory(new File("src/main/resources/latex")); // Set the working directory to the directory where the LaTeX files are located
+            processBuilder.redirectErrorStream(true); // Merge the error stream into the standard output stream
 
-            // 启动 pdflatex 进程
+            // Start the pdflatex process
             Process process = processBuilder.start();
 
-            // 获取进程输出流
+            // Get the process output stream
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             while ((line = reader.readLine()) != null) {
-                // 输出 pdflatex 进程的标准输出
+                // Output standard output of the pdflatex process
                 System.out.println(line);
             }
 
 
-            // 等待 pdflatex 进程执行完成
+            // Waiting for the pdflatex process to finish
             int exitCode = process.waitFor();
             if (exitCode == 0) {
-                System.out.println("PDF 文件：" + latexSpeech.getTitle() + "生成成功");
-                // 移动 PDF 文件到指定目录
+                System.out.println("PDF ：" + latexSpeech.getTitle() + "Generated successfully");
+                // Move PDF files to a specified directory
                 File sourcePdfFile = new File("src/main/resources/latex/" + filePrefix + ".pdf");
                 File targetPdfFile = new File(pdfDirectoryPath, filePrefix + ".pdf");
-                // 如果已经存在这个pdf了，先删除，再移动
+                // If the pdf already exists, delete it first, then move it.
                 if (targetPdfFile.exists()) {
                     boolean deleted = targetPdfFile.delete();
                     if (deleted) {
-                        System.out.println("已删除目标 PDF 文件：" + targetPdfFile.getAbsolutePath());
+                        System.out.println("Deleted target PDF file：" + targetPdfFile.getAbsolutePath());
                     } else {
-                        System.out.println("无法删除目标 PDF 文件：" + targetPdfFile.getAbsolutePath());
+                        System.out.println("Unable to delete target PDF file：" + targetPdfFile.getAbsolutePath());
                         return filePrefix;
                     }
                 }
                 boolean moved = sourcePdfFile.renameTo(targetPdfFile);
                 if (moved) {
-                    System.out.println("PDF 文件移动成功");
+                    System.out.println("PDF file moved successfully");
                 } else {
-                    System.out.println("PDF 文件移动失败");
+                    System.out.println("PDF file move failure");
                 }
             } else {
-                System.out.println("PDF 文件生成失败。");
+                System.out.println("PDF file generation failed.");
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

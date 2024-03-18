@@ -5,20 +5,13 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONObject;
-import org.texttechnology.parliament_browser_6_4.data.AgendaItem;
-import org.texttechnology.parliament_browser_6_4.data.Comment;
-import org.texttechnology.parliament_browser_6_4.data.PlenaryProtocol;
-import org.texttechnology.parliament_browser_6_4.data.Speech;
+import org.texttechnology.parliament_browser_6_4.data.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -208,34 +201,71 @@ public class MongoDBConnectionHandler {
         return mongoDocument;
     }
 
-    /**
-     * 查询所有文档
-     * @param collection MongoDB文档集合
-     * @return documents 包含所有文档的列表
+    public Document insertSpeaker(Speaker speaker){
+        Document mongoDocument = new Document();
+        mongoDocument.put("_id", speaker.getID());
+        mongoDocument.put("name", speaker.getName());
+        mongoDocument.put("firstName", speaker.getFirstName());
+        mongoDocument.put("title", speaker.getTitle());
+        mongoDocument.put("geburtsdatum", speaker.getGeburtsdatum());
+        mongoDocument.put("geburtsort", speaker.getGeburtsort());
+        mongoDocument.put("sterbedatum", speaker.getSterbeDatum());
+        mongoDocument.put("geschlecht", speaker.getGeschlecht().toString());
+        mongoDocument.put("beruf", speaker.getBeruf());
+        mongoDocument.put("akademischertitel", speaker.getAkademischerTitel());
+        mongoDocument.put("familienstand", speaker.getFamilienstand());
+        mongoDocument.put("religion", speaker.getReligion());
+        mongoDocument.put("vita", speaker.getVita());
+        mongoDocument.put("adressing", speaker.getAdressing());
 
-    public static List<Document> queryAllDocuments(MongoCollection<Document> collection) {
-        List<Document> documents = new ArrayList<>();
-        FindIterable<Document> iterDoc = collection.find();
-        for (Document document : iterDoc) {
-            documents.add(document);
+        List<Integer> iAbsendes = new ArrayList<>();
+        for (PlenaryProtocol absence : speaker.getAbsences()) {
+            iAbsendes.add(absence.getIndex());
         }
-        return documents;
-    }*/
+
+        mongoDocument.put("absence", iAbsendes);
+        if(speaker.getParty()!=null){
+            mongoDocument.put("party", speaker.getParty().getName());
+        }
+        if(speaker.getFraction()!=null){
+            mongoDocument.put("fraction", speaker.getFraction().getName());
+        }
+        mongoDocument.put("role", speaker.getRole());
+        return mongoDocument;
+
+
+    }
+
+    /**
+     * Enquiry Document
+     * @param query
+     * @param sCollection
+     * @return
+     */
     public MongoCursor queryDocuments(BasicDBObject query, String sCollection){
         FindIterable result = this.getCollection(sCollection).find(query);
         return result.iterator();
     }
 
     /**
-     * 查询文档
-     * @param collection MongoDB文档集合
-     * @param filter 过滤条件
-     * @return 包含查询结果的文档列表
+     * Method to execute a query
+     * @param query
+     * @return
+     */
+    public MongoCursor queryDocuments(String query, String sCollection){
+        return queryDocuments(BasicDBObject.parse(query), sCollection);
+    }
+
+    /**
+     * Enquiry Document
+     * @param collection MongoDB Documentation Collection
+     * @param filter filtration conditions
+     * @return List of documents containing query results
      */
     public static List<Document> findDocuments(MongoCollection<Document> collection, Bson filter) {
         List<Document> documents = new ArrayList<>();
         FindIterable<Document> result = collection.find(filter);
-        // 遍历查询结果并输出
+        // Iterate through the query results and output
         for (Document document : result) {
             documents.add(document);
         }
@@ -244,8 +274,8 @@ public class MongoDBConnectionHandler {
 
 
     /**
-     * 更新文档
-     * @param collection MongoDB文档集合
+     * Update Documentation
+     * @param collection MongoDB Documentation Collection
      * @param field 需要匹配的字段
      * @param value 字段匹配的值
      * @param updateField 需要更新的字段

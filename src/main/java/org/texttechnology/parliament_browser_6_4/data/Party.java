@@ -2,7 +2,11 @@ package org.texttechnology.parliament_browser_6_4.data;
 
 import java.util.Set;
 
-public interface Party {
+/**
+ * Interface for mapping parties
+ * @author Giuseppe Abrami
+ */
+public interface Party extends Comparable<Party> {
 
     /**
      * Return the name of the party
@@ -33,4 +37,6 @@ public interface Party {
      * @param pSet
      */
     void addMembers(Set<Speaker> pSet);
+
+
 }

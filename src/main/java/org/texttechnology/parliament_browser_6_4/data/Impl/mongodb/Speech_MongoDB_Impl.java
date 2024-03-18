@@ -12,14 +12,14 @@ import org.apache.uima.jcas.JCas;
 import org.bson.Document;
 import org.hucompute.textimager.uima.type.Sentiment;
 import org.texttechnology.parliament_browser_6_4.data.CasProcesser;
-import org.texttechnology.parliament_browser_6_4.data.Impl.Speech_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.file.Speech_File_Impl;
 import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
 import org.texttechnology.parliament_browser_6_4.data.Speech;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Speech_MongoDB_Impl extends Speech_Impl implements Speech, CasProcesser {
+public class Speech_MongoDB_Impl extends Speech_File_Impl implements Speech, CasProcesser {
 
     private Document doc = null;
 

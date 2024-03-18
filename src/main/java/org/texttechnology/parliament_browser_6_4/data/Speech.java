@@ -2,8 +2,16 @@ package org.texttechnology.parliament_browser_6_4.data;
 
 import java.util.List;
 
-public interface Speech extends PlenaryObject{
+/**
+ * Interface for mapping a speech
+ * @author Giuseppe Abrami
+ */
+public interface Speech extends PlenaryObject {
 
+    /**
+     * Return the agenda item the speech belongs to
+     * @return
+     */
     AgendaItem getAgendaItem();
 
     /**
@@ -50,5 +58,10 @@ public interface Speech extends PlenaryObject{
      */
     List<Speech> getInsertions();
 
+    /**
+     * Add a text-segment to the speech
+     * @param pText
+     */
+    void addText(Text pText);
 
 }

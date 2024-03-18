@@ -2,7 +2,11 @@ package org.texttechnology.parliament_browser_6_4.data;
 
 import java.util.Set;
 
-public interface Fraction {
+/**
+ * Interface for mapping fractions
+ * @author Giuseppe Abrami
+ */
+public interface Fraction extends Comparable<Fraction> {
 
     /**
      * Return the Name of the Fraction

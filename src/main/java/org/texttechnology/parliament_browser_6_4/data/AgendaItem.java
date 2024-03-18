@@ -3,7 +3,11 @@ package org.texttechnology.parliament_browser_6_4.data;
 import java.util.List;
 import java.util.Set;
 
-public interface AgendaItem extends PlenaryObject{
+/**
+ * Class for mapping agenda items
+ * @author Giuseppe Abrami
+ */
+public interface AgendaItem extends PlenaryObject {
 
     /**
      * Get all Speeches
@@ -17,7 +21,11 @@ public interface AgendaItem extends PlenaryObject{
      */
     void addSpeech(Speech pValue);
 
-
+    /**
+     * Add multiple speeches to this agenda
+     * @param pSet
+     */
+    void addSpeeches(Set<Speech> pSet);
 
     /**
      * Return the index of the agenda
