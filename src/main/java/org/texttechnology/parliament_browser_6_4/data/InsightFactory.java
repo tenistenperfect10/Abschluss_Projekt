@@ -4,6 +4,7 @@ import com.mongodb.client.AggregateIterable;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.texttechnology.parliament_browser_6_4.data.Impl.User_Impl;
+import org.texttechnology.parliament_browser_6_4.helper.NLPHelper;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,18 @@ public interface InsightFactory {
      * @param pSpeaker
      */
     void addSpeaker(Speaker pSpeaker);
+
+    /**
+     * Get all speeches
+     * @return
+     */
+    List<Speech> getSpeeches();
+
+    /**
+     * Get all comments
+     * @return
+     */
+    List<Comment> getComments();
 
 
     List<Document> findByIds(List<String> commentIdList);
@@ -71,6 +84,12 @@ public interface InsightFactory {
     Document findSpeechById(String id);
 
     AggregateIterable<Document> globalQueryByKeyword(String keyword);
+
+    /**
+     * Get the NLP Helper
+     * @return
+     */
+    NLPHelper getNLPHelper();
 
 
 

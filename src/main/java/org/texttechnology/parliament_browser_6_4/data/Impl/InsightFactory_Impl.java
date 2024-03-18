@@ -1,20 +1,21 @@
 package org.texttechnology.parliament_browser_6_4.data.Impl;
 
-import cn.hutool.json.JSONUtil;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.texttechnology.parliament_browser_6_4.data.Comment;
+import org.texttechnology.parliament_browser_6_4.data.Impl.mongodb.Comment_MongoDB_Impl;
+import org.texttechnology.parliament_browser_6_4.data.Impl.mongodb.Speech_MongoDB_Impl;
 import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
 import org.texttechnology.parliament_browser_6_4.data.Speaker;
 import org.texttechnology.parliament_browser_6_4.data.Speech;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBConfig;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBConnectionHandler;
+import org.texttechnology.parliament_browser_6_4.helper.NLPHelper;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -32,19 +33,28 @@ public class InsightFactory_Impl implements InsightFactory {
 
     private MongoDBConnectionHandler dbConnectionHandler = null;
 
-    private MongoCollection<Document> userCollection ;
+    private MongoCollection<Document> userCollection = null ;
 
-    private MongoCollection<Document> speakerCollection;
+    private MongoCollection<Document> speakerCollection = null;
 
-    private MongoCollection<Document> commentCollection;
+    private MongoCollection<Document> commentCollection = null;
 
-    private MongoCollection<Document> speechCollection;
+    private MongoCollection<Document> speechCollection = null;
 
-    private MongoCollection<Document> abgeordnterCollection;
+    private MongoCollection<Document> abgeordnterCollection = null;
 
-    private MongoCollection<Document> meetingCollection;
+    private MongoCollection<Document> meetingCollection = null;
+
+    private NLPHelper nlpHelper = null;
+
+    public InsightFactory_Impl(MongoDBConnectionHandler dbConnectionHandler){
+        this.dbConnectionHandler = dbConnectionHandler;
+    }
 
 
+    public InsightFactory_Impl() throws Exception {
+        this.nlpHelper = new NLPHelper();
+    }
 
     /**
      * Retrieves the MongoDBConnectionHandler for database interactions.
@@ -95,6 +105,26 @@ public class InsightFactory_Impl implements InsightFactory {
     @Override
     public void addSpeaker(Speaker pSpeaker) {
 
+    }
+
+    @Override
+    public List<Speech> getSpeeches() {
+        List<Speech> sList = new ArrayList<>(0);
+        MongoCursor<Document> cursor = this.dbConnectionHandler.queryDocuments(BasicDBObject.parse("{}"),"speech");
+        cursor.forEachRemaining(document -> {
+            sList.add(new Speech_MongoDB_Impl(this,document));
+        });
+        return sList;
+    }
+
+    @Override
+    public List<Comment> getComments() {
+        List<Comment> cList = new ArrayList<>(0);
+        MongoCursor<Document> cursor = this.dbConnectionHandler.queryDocuments(BasicDBObject.parse("{}"),"comment");
+        cursor.forEachRemaining(document -> {
+            cList.add(new Comment_MongoDB_Impl(this,document));
+        });
+        return cList;
     }
 
     @Override
@@ -471,6 +501,11 @@ public class InsightFactory_Impl implements InsightFactory {
         String regexKeyword = ".*" + Pattern.quote(keyword) + ".*";
         Document query = new Document("text", new Document("$regex", regexKeyword));
         return aggregateQuery(query);
+    }
+
+    @Override
+    public NLPHelper getNLPHelper() {
+        return this.nlpHelper;
     }
 }
 

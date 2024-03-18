@@ -1,5 +1,7 @@
 package org.texttechnology.parliament_browser_6_4.data;
 
+import org.apache.uima.jcas.JCas;
+
 public interface Comment extends PlenaryObject{
 
     /**
@@ -31,4 +33,5 @@ public interface Comment extends PlenaryObject{
      * @return
      */
     String getContent();
+
 }
