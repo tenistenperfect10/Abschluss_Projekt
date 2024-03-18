@@ -1,20 +1,32 @@
 package org.texttechnology.parliament_browser_6_4.data.Impl;
 
+import org.bson.Document;
+import org.texttechnology.parliament_browser_6_4.data.Impl.Speech_Impl;
+import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
 import org.texttechnology.parliament_browser_6_4.data.Speech_mongoDB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Speech_mongoDB_Impl implements Speech_mongoDB {
-    private String speaker;
+    private String speaker = null;
 
-    private String text;
+    private String text = null;
 
-    private List<String> comments;
+    private List<String> comments = new ArrayList<>(0);
+
+    private Document doc = null;
+
+    private InsightFactory fac = null;
 
     public Speech_mongoDB_Impl(String speaker, String text, List<String> comments) {
         this.speaker = speaker;
         this.text = text;
         this.comments = comments;
+    }
+    public Speech_mongoDB_Impl(InsightFactory fac,Document doc){
+        this.fac = fac;
+        this.doc = doc;
     }
 
     public Speech_mongoDB_Impl() {

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.eq;
 import static org.texttechnology.parliament_browser_6_4.helper.MongoDBUtils.listCollections;
 
 /**
@@ -211,7 +212,7 @@ public class MongoDBConnectionHandler {
      * 查询所有文档
      * @param collection MongoDB文档集合
      * @return documents 包含所有文档的列表
-     */
+
     public static List<Document> queryAllDocuments(MongoCollection<Document> collection) {
         List<Document> documents = new ArrayList<>();
         FindIterable<Document> iterDoc = collection.find();
@@ -219,6 +220,10 @@ public class MongoDBConnectionHandler {
             documents.add(document);
         }
         return documents;
+    }*/
+    public MongoCursor queryDocuments(BasicDBObject query, String sCollection){
+        FindIterable result = this.getCollection(sCollection).find(query);
+        return result.iterator();
     }
 
     /**
@@ -247,7 +252,7 @@ public class MongoDBConnectionHandler {
      * @param updateValue 更新的值
      */
     public static void updateDocument(MongoCollection<Document> collection, String field, String value, String updateField, Object updateValue) {
-        collection.updateMany(Filters.eq(field, value), Updates.set(updateField, updateValue));
+        collection.updateMany(eq(field, value), Updates.set(updateField, updateValue));
         System.out.println("Document update successfully...");
     }
 
@@ -258,7 +263,7 @@ public class MongoDBConnectionHandler {
      * @param value 字段值
      */
     public static void deleteDocument(MongoCollection<Document> collection, String field, String value) {
-        collection.deleteOne(Filters.eq(field, value));
+        collection.deleteOne(eq(field, value));
         System.out.println("Document delete successfully...");
     }
 
@@ -315,6 +320,10 @@ public class MongoDBConnectionHandler {
 
         // 执行更新操作
         collection.updateOne(query, update);
+    }
+
+    public static void updateDocument(MongoCollection collection, String query, Document document){
+        collection.updateOne(eq("_id", query), new Document("$set", document));
     }
 
 }

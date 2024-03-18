@@ -1,5 +1,6 @@
 package org.texttechnology.parliament_browser_6_4;
 
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import freemarker.template.Configuration;
 import org.texttechnology.parliament_browser_6_4.controller.*;
@@ -8,9 +9,12 @@ import org.texttechnology.parliament_browser_6_4.data.Impl.InsightFactory_Impl;
 import org.texttechnology.parliament_browser_6_4.data.configuration.FreemarkerBasedRoute;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBConfig;
 import org.texttechnology.parliament_browser_6_4.helper.MongoDBConnectionHandler;
+import org.texttechnology.parliament_browser_6_4.helper.NLPHelper;
 import spark.Spark;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 import static spark.Spark.setPort;
 /**
@@ -28,17 +32,21 @@ public class Launch {
      *
      * @throws IOException If there is an issue reading the database configuration file or initializing Freemarker.
      */
-    public Launch() throws IOException {
+    public Launch() throws Exception {
         String pTarget = Launch.class.getClassLoader().getResource("Project_06_04.txt").getPath();
+        pTarget = URLDecoder.decode(pTarget, StandardCharsets.UTF_8);
+        System.out.println(pTarget);
         MongoDBConfig dbConfigTarget = new MongoDBConfig(pTarget);
         MongoDBConnectionHandler mongoDBConnectionHandler = new MongoDBConnectionHandler(dbConfigTarget);
         MongoDatabase mongoDatabase = mongoDBConnectionHandler.getDatabase();
+
         cfg = FreemarkerBasedRoute.createFreemarkerConfiguration();
 
         Spark.staticFiles.location("/public");
         setPort(8080);
         InsightFactory_Impl factory = new InsightFactory_Impl();
         factory.createDatabaseConnection(dbConfigTarget);
+
         LogDAO.init(mongoDatabase);
 
         //System.out.println(factory.findBySpeechId("ID209613000"));
@@ -63,8 +71,9 @@ public class Launch {
      * @param args Command line arguments passed to the application.
      * @throws IOException If there is an issue launching the application.
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         new Launch();
+
     }
 
 }

@@ -1,5 +1,7 @@
 package org.texttechnology.parliament_browser_6_4.data.Impl;
 
+import org.apache.uima.jcas.JCas;
+import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import org.texttechnology.parliament_browser_6_4.data.*;
 import org.w3c.dom.Node;
@@ -17,6 +19,13 @@ public class Comment_Impl extends PlenaryObject_Impl implements Comment {
     public Comment_Impl(Node pNode){
          pNode.getTextContent();
     }
+
+    public Comment_Impl(InsightFactory fac) {
+        super(fac);
+        
+    }
+
+
     /**
      * Return the speech the text belongs to
      *
@@ -70,7 +79,7 @@ public class Comment_Impl extends PlenaryObject_Impl implements Comment {
     public String getContent() {
         return this.sText;
     }
-
+    
 
 
     /**
