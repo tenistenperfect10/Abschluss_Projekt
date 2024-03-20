@@ -6,6 +6,9 @@ import org.texttechnology.parliament_browser_6_4.data.InsightFactory;
 
 import java.io.IOException;
 
+/**
+ *  set up and manage routes for handling requests related to comments
+ */
 public class CommentController {
 
     private final InsightFactory insightFactory;

@@ -18,6 +18,9 @@ import java.util.List;
 
 import static spark.Spark.get;
 
+/**
+ * Initialising the page
+ */
 public class MeetingController {
 
     private final InsightFactory insightFactory;
@@ -34,7 +37,10 @@ public class MeetingController {
         initializeRoutes();
     }
 
-
+    /**
+     * sets up web routes for handling HTTP requests using the Freemarker template engine
+     * @throws IOException
+     */
 
     private void initializeRoutes() throws IOException {
 

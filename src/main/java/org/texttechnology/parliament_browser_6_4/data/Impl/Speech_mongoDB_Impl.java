@@ -7,6 +7,9 @@ import org.texttechnology.parliament_browser_6_4.data.Speech_mongoDB;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *implemention of Interface speech_mongoDB
+ */
 public class Speech_mongoDB_Impl implements Speech_mongoDB {
     private String speaker = null;
 
@@ -18,6 +21,12 @@ public class Speech_mongoDB_Impl implements Speech_mongoDB {
 
     private InsightFactory fac = null;
 
+    /**
+     * main method
+     * @param speaker
+     * @param text
+     * @param comments
+     */
     public Speech_mongoDB_Impl(String speaker, String text, List<String> comments) {
         this.speaker = speaker;
         this.text = text;
@@ -31,10 +40,20 @@ public class Speech_mongoDB_Impl implements Speech_mongoDB {
     public Speech_mongoDB_Impl() {
     }
 
+    /**
+     * get the speaker
+     * @return
+     */
+
     @Override
     public String getSpeaker() {
         return this.speaker;
     }
+
+    /**
+     * set the speaker
+     * @param speaker
+     */
 
     @Override
     public void setSpeaker(String speaker) {
@@ -43,10 +62,20 @@ public class Speech_mongoDB_Impl implements Speech_mongoDB {
 
     }
 
+    /**
+     * get the text
+     * @return
+     */
+
     @Override
     public String getText() {
         return this.text;
     }
+
+    /**
+     * set the text
+     * @param text
+     */
 
     @Override
     public void setText(String text) {
@@ -55,10 +84,20 @@ public class Speech_mongoDB_Impl implements Speech_mongoDB {
 
     }
 
+    /**
+     * get the list of comments
+     * @return
+     */
+
     @Override
     public List<String> getComments() {
         return this.comments;
     }
+
+    /**
+     * set the list of comments
+     * @param comments
+     */
 
     @Override
     public void setComments(List<String> comments) {

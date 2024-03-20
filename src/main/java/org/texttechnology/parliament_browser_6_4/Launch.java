@@ -46,6 +46,7 @@ public class Launch {
         setPort(8080);
         InsightFactory_Impl factory = new InsightFactory_Impl();
         factory.createDatabaseConnection(dbConfigTarget);
+        LogDAO logDAO = new LogDAO(mongoDatabase);
 
         LogDAO.init(mongoDatabase);
 
@@ -56,13 +57,14 @@ public class Launch {
         //SpeakerDAO speakerDAO = new SpeakerDAO(mongoDatabase);
         //SpeechDAO speechDAO = new SpeechDAO(mongoDatabase);
         UserDAO userDAO = new UserDAO(mongoDatabase);
-        LogDAO.init(mongoDatabase);
+        //LogDAO.init(mongoDatabase);
 
         new MeetingController(factory, userDAO, cfg);
         new CommentController(factory, cfg);
         new SpeakerController(factory, cfg);
         new SpeechController( cfg,factory);
         new UserController(userDAO, cfg);
+        new LogController(logDAO,cfg);
     }
 
     /**

@@ -68,12 +68,12 @@
     </style>
     <script>
         $(document).ready(function () {
-            // 点击蒙层消失
+            // Click on the mask to disappear
             $(".overlay").on("click", function () {
                 $(".overlay").hide();
             })
 
-            // 点击卡片展示蒙层
+            // Click on the card to show the mask
             $(".card").on("click", function () {
                 var url = $(this).find("img").attr("src");
                 var subHtml = $(this).find(".desc").attr("data-html");

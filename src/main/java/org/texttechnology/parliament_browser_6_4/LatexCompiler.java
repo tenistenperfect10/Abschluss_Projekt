@@ -2,8 +2,14 @@ package org.texttechnology.parliament_browser_6_4;
 
 import java.io.*;
 
+/**
+ * Methods for compiling latex
+ */
 public class LatexCompiler {
-
+    /**
+     * main methode
+     * @param args
+     */
     public static void main(String[] args) {
         String textSource = "\\documentclass{article}\n" +
                 "\\begin{document}\n" +
@@ -29,6 +35,14 @@ public class LatexCompiler {
             e.printStackTrace();
         }
     }
+
+    /**
+     * output data
+     * @param process
+     * @param textSource
+     * @return
+     * @throws IOException
+     */
 
     private static BufferedWriter getBufferedWriter(Process process, String textSource) throws IOException {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));

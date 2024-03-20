@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.texttechnology.parliament_browser_6_4.data.*;
 
@@ -142,66 +143,101 @@ public class MongoDBConnectionHandler {
      */
     public MongoDatabase getDatabase(){ return this.pDatabase;}
 
+    /**
+     * insert speech to mongoDB
+     * @param pSpeech
+     * @return
+     */
     public Document insertSpeech(Speech pSpeech) {
+        Document rDocument = null;
 
-        Document mongoDocument = new Document();
-        mongoDocument.put("_id", pSpeech.getID());
-        mongoDocument.put("text", pSpeech.getPlainText());
-        mongoDocument.put("length", pSpeech.getPlainText().length());
-        mongoDocument.put("speaker", pSpeech.getSpeaker().getID());
+        rDocument = getObject(pSpeech.getID(), "speech");
 
-        BasicDBObject protocolObject = new BasicDBObject();
-        PlenaryProtocol pProtocol = pSpeech.getProtocol();
+        if(rDocument==null){
 
-        protocolObject.put("date", pProtocol.getDate().getTime());
-        protocolObject.put("starttime", pProtocol.getStartTime().getTime());
-        protocolObject.put("endtime", pProtocol.getEndTime().getTime());
-        protocolObject.put("index", pProtocol.getIndex());
-        protocolObject.put("title", pProtocol.getTitle());
-        protocolObject.put("place", pProtocol.getPlace());
-        protocolObject.put("wp", pProtocol.getWahlperiode());
+            Document mongoDocument = null;
+            try {
+                mongoDocument.put("_id", pSpeech.getID());
+                mongoDocument.put("text", pSpeech.getPlainText());
+                mongoDocument.put("length", pSpeech.getPlainText().length());
+                mongoDocument.put("speaker", pSpeech.getSpeaker().getID());
 
-        mongoDocument.put("protocol", protocolObject);
+                BasicDBObject protocolObject = new BasicDBObject();
+                PlenaryProtocol pProtocol = pSpeech.getProtocol();
 
-        AgendaItem pItem = pSpeech.getAgendaItem();
+                protocolObject.put("date", pProtocol.getDate().getTime());
+                protocolObject.put("starttime", pProtocol.getStartTime().getTime());
+                protocolObject.put("endtime", pProtocol.getEndTime().getTime());
+                protocolObject.put("index", pProtocol.getIndex());
+                protocolObject.put("title", pProtocol.getTitle());
+                protocolObject.put("place", pProtocol.getPlace());
+                protocolObject.put("wp", pProtocol.getWahlperiode());
 
-        JSONObject agendaItem = new JSONObject();
-        agendaItem.put("id", pItem.getID());
-        agendaItem.put("index", pItem.getIndex());
-        agendaItem.put("title", pItem.getTitle());
+                mongoDocument.put("protocol", protocolObject);
 
-        List comments = new ArrayList<>();
+                AgendaItem pItem = pSpeech.getAgendaItem();
 
-        for (Comment c : pSpeech.getComments()) {
-            comments.add(c.getID());
+                JSONObject agendaItem = new JSONObject();
+                agendaItem.put("id", pItem.getID());
+                agendaItem.put("index", pItem.getIndex());
+                agendaItem.put("title", pItem.getTitle());
+
+                List comments = new ArrayList<>();
+
+                for (Comment c : pSpeech.getComments()) {
+                    comments.add(c.getID());
+                }
+
+                mongoDocument.put("comments", comments);
+                mongoDocument.put("agenda", Document.parse(agendaItem.toString()));
+
+                mongoDocument.put("speaker", pSpeech.getSpeaker().getID());
+
+                this.getCollection("speech").insertOne(mongoDocument);
+
+                rDocument = getObject(pSpeech.getID(), "speech");
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
-        mongoDocument.put("comments", comments);
-        mongoDocument.put("agenda", Document.parse(agendaItem.toString()));
-
-        mongoDocument.put("speaker", pSpeech.getSpeaker().getID());
-
-        this.getCollection("speech").insertOne(mongoDocument);
-
-        return mongoDocument;
-
+        return rDocument;
     }
+
+    /**
+     * insert comment to mongoDB
+     * @param pComment
+     * @return
+     */
 
     public Document insertComment(Comment pComment){
 
-        // creating a empty MongoDocument and add attributes
-        Document mongoDocument = new Document();
-        mongoDocument.put("_id", pComment.getID());
-        mongoDocument.put("text", pComment.getContent());
-        mongoDocument.put("speaker", pComment.getSpeaker()!=null ? pComment.getSpeaker().getID() : "");
-        mongoDocument.put("speech", pComment.getSpeech()!=null ? pComment.getSpeech().getID() : "");
+        Document rDocument = null;
 
-        this.getCollection("comment").insertOne(mongoDocument);
+        rDocument = getObject(pComment.getID(), "comment");
 
-        return mongoDocument;
+        if(rDocument==null){
+            Document mongoDocument = null;
+
+            // creating a empty MongoDocument and add attributes
+            mongoDocument.put("_id", pComment.getID());
+            mongoDocument.put("text", pComment.getContent());
+            mongoDocument.put("speaker", pComment.getSpeaker()!=null ? pComment.getSpeaker().getID() : "");
+            mongoDocument.put("speech", pComment.getSpeech()!=null ? pComment.getSpeech().getID() : "");
+
+
+            this.getCollection("comment").insertOne(mongoDocument);
+            rDocument = getObject(pComment.getID(), "comment");
+        }
+
+
+        return rDocument;
     }
 
     public Document insertSpeaker(Speaker speaker){
+
         Document mongoDocument = new Document();
         mongoDocument.put("_id", speaker.getID());
         mongoDocument.put("name", speaker.getName());
@@ -276,10 +312,10 @@ public class MongoDBConnectionHandler {
     /**
      * Update Documentation
      * @param collection MongoDB Documentation Collection
-     * @param field 需要匹配的字段
-     * @param value 字段匹配的值
-     * @param updateField 需要更新的字段
-     * @param updateValue 更新的值
+     * @param field Fields to match
+     * @param value Values matched by fields
+     * @param updateField Fields to be updated
+     * @param updateValue Updated values
      */
     public static void updateDocument(MongoCollection<Document> collection, String field, String value, String updateField, Object updateValue) {
         collection.updateMany(eq(field, value), Updates.set(updateField, updateValue));
@@ -287,10 +323,10 @@ public class MongoDBConnectionHandler {
     }
 
     /**
-     * 删除指定集合中符合条件的文档
-     * @param collection 要操作的MongoDB集合
-     * @param field 字段名
-     * @param value 字段值
+     * Deletes eligible documents in a specified collection
+     * @param collection The MongoDB collection to manipulate
+     * @param field field name
+     * @param value field value
      */
     public static void deleteDocument(MongoCollection<Document> collection, String field, String value) {
         collection.deleteOne(eq(field, value));
@@ -298,8 +334,8 @@ public class MongoDBConnectionHandler {
     }
 
     /**
-     * 删除指定名称的集合
-     * @param collectionName 需要删除的集合名称
+     * Deletes a collection with a specified name
+     * @param collectionName Name of the collection to be deleted
      */
     public void dropCollection(String collectionName) {
         MongoCollection<Document> collection = this.pDatabase.getCollection(collectionName);
@@ -310,7 +346,7 @@ public class MongoDBConnectionHandler {
     }
 
     /**
-     * 关闭数据库连接
+     * Close the database connection
      */
     public  void closeConnection() {
         pClient.close();
@@ -319,38 +355,6 @@ public class MongoDBConnectionHandler {
 
 
 
-
-    /**
-     * 通过字段和查询值查询文档条目
-     * @param collection MongoDB文档集合
-     * @param field 查询字段
-     * @param queryValue 查询值
-     * @return 包含查询结果的文档列表
-     */
-    public static List<Document> queryEntriesByField(MongoCollection<Document> collection, String field, String queryValue) {
-        Document query = new Document(field, new Document("$eq", queryValue));
-        List<Document> list = collection.find(query).into(new ArrayList<>());
-        return list;
-    }
-
-    /**
-     *
-     * @param collection 操作的collection
-     * @param fieldName 待更新文档的查询字段
-     * @param fieldValue 待更新文档查询字段的值
-     * @param json 待更新的json
-     */
-    public static void updateDocumentWithJson(MongoCollection<Document> collection, String fieldName, String fieldValue, String json) {
-
-        // 要更新的document的查询条件
-        Document query = new Document(fieldName, fieldValue); // 替换成你实际的查询条件
-
-        // 要添加的字段和值
-        Document update = new Document("$set", Document.parse(json));
-
-        // 执行更新操作
-        collection.updateOne(query, update);
-    }
 
     public static void updateDocument(MongoCollection collection, String query, Document document){
         collection.updateOne(eq("_id", query), new Document("$set", document));

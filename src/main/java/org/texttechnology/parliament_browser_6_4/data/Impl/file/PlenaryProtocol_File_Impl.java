@@ -35,7 +35,7 @@ public class PlenaryProtocol_File_Impl extends PlenaryObject_File_Impl implement
 
     // variable declaration
     private int iIndex = -1;
-    private Date pDate = null;//关于这里为什么要设置private：可能是担心别的地方也有这个变量最后导致变量重复
+    private Date pDate = null;//
     private Time pStartTime = null;
     private Time pEndTime = null;
     private String sTitle = "";

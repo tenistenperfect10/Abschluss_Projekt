@@ -50,7 +50,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        /* 设置表单项的样式 */
+        /* Setting the style of form items */
         .form-group {
             width: 80%;
             display: flex;
@@ -85,7 +85,7 @@
             border-radius: 8px;
         }
         .button:hover {
-            background-color: #45a049; /* 鼠标悬停时的背景色变化 */
+            background-color: #45a049; /* Background colour change on mouse hover */
         }
     </style>
     <script>
@@ -108,7 +108,7 @@
                     contentType: 'application/json',
                     data: JSON.stringify(speech),
                     success: function(response) {
-                        // 在成功后的操作，根据需要处理后端返回的响应
+                        // After the successful operation, process the response returned by the backend as needed
                         if (response && response.code === 0) {
                             messageBox.showSuccess("Update succeed");
                             location.reload();
@@ -117,7 +117,7 @@
                         }
                     },
                     error: function(error) {
-                        // 处理错误
+                        // process error
                         console.log(error);
                     }
                 })

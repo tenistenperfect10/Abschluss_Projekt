@@ -26,6 +26,9 @@ import java.util.*;
 
 import static spark.Spark.*;
 
+/**
+ *  set up and manage routes for handling requests related to speakers
+ */
 public class SpeakerController {
 
     private final InsightFactory insightFactory;
@@ -38,6 +41,11 @@ public class SpeakerController {
         initializeRoutes();
     }
 
+    /**
+     *  defines route handlers for a web application managing speakers,
+     *  using the Freemarker template engine for rendering views.
+     * @throws IOException
+     */
     private void initializeRoutes() throws IOException {
 
         before("/speaker/*", (request, response) -> {
@@ -121,7 +129,7 @@ public class SpeakerController {
                 JSONObject obj = JSONUtil.parseObj(request.body());
                 System.out.println(obj);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                // 解析字符串并转换为Date对象
+                // Parses a string and converts it to a Date object
                 Date geburtsdatum = null;
                 Date sterbedatum = null;
                 if (!JSONNull.NULL.equals(obj.get("geburtsdatum"))) {

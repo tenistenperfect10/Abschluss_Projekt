@@ -12,7 +12,7 @@ import java.util.Set;
 
 /**
  * Implementation of AgendaItem based on Files
- * @author
+ * @author Giuseppe Abrami
  */
 public class AgendaItem_File_Impl extends PlenaryObject_File_Impl implements AgendaItem {
     // Declaration of variables for a protocol

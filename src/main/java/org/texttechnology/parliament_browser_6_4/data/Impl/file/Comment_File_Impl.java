@@ -6,7 +6,7 @@ import org.w3c.dom.Node;
 
 /**
  * Comment implementation
- * @author
+ * @author Giuseppe Abrami
  */
 public class Comment_File_Impl extends Text_File_Impl implements Comment {
 

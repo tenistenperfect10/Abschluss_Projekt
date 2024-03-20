@@ -14,6 +14,9 @@ import java.util.Map;
 
 import static spark.Spark.post;
 
+/**
+ *  set up and manage routes for handling requests related to log
+ */
 public class LogController {
 
     private final LogDAO logDAO;
@@ -31,14 +34,14 @@ public class LogController {
 
         post("/logs", (request, response) -> {
 
-            // 构建响应数据（这里使用一个简单的示例）
+            // Constructing response data (using a simple example here)
             List<Document> logList = logDAO.getLogs();
 
-            // 设置响应头
+            // Setting the response header
             response.header("Content-Type", "application/json");
 
             String json = convertListToJson(logList);
-            // 返回响应数据
+            // Return response data
             return json;
         });
     }
@@ -54,14 +57,14 @@ public class LogController {
         }
 
         for (Document document : documents) {
-            // 使用 LinkedHashMap 保持键值对的插入顺序
+            // Keeping Key-Value Pairs in Insertion Order with LinkedHashMap
             Map<String, Object> orderedMap = new LinkedHashMap<>(document);
 
-            // 处理 _id 字段，将 ObjectId 转换为字符串形式
+            // Processes the _id field, converting the ObjectId to string form
             ObjectId objectId = (ObjectId) orderedMap.get("_id");
             orderedMap.put("_id", objectId.toString());
 
-            // 将 Map 转换为 JSON 字符串
+            // Converting a Map to a JSON String
             String jsonDocument = new Document(orderedMap).toJson();
             jsonDocuments.add(jsonDocument);
         }

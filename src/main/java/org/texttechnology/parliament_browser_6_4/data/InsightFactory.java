@@ -15,6 +15,7 @@ import java.util.Set;
 /**
  * Provides the interface for managing user insights within the application.
  * This includes querying, finding, saving, matching, updating, and deleting user data.
+ * @author Giuseppe Abrami
  */
 public interface InsightFactory {
 

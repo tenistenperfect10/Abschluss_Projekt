@@ -23,6 +23,9 @@ import java.util.List;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
+/**
+ * manage users and admins
+ */
 public class UserController {
 
     private final UserDAO userDAO;
@@ -35,6 +38,10 @@ public class UserController {
         initializeRoutes();
     }
 
+    /**
+     * Functions for user login and rights management are set up.
+     * @throws IOException
+     */
     private void initializeRoutes() throws IOException {
         get("/login", new FreemarkerBasedRoute("/login", "login.ftl", cfg) {
             @Override
@@ -68,6 +75,7 @@ public class UserController {
             try {
                 User_Impl user = JSONUtil.toBean(request.body(), User_Impl.class);
                 if (user.getUserType() == 1) {
+                    // keys
                     if (user.getVerifyCode() == null || !user.getVerifyCode().equals("150624")) {
                         return Result.buildError("The secret key is wrong");
                     }
@@ -75,7 +83,7 @@ public class UserController {
                 if (userDAO.queryExistUser(user.getUsername()) != null) {
                     return Result.buildError("The user is already exist");
                 }
-                // 管理员都具备编辑权限
+                // Administrators have editing privileges
                 user.setCanEdit(user.getUserType());
                 userDAO.saveUser(user);
                 return Result.buildSuccess();

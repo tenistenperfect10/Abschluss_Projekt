@@ -19,6 +19,11 @@ public class LogDAO {
 
     private volatile static LogDAO instance;
 
+    /**
+     * run the log
+     * @param database
+     * @return
+     */
     public static LogDAO init(MongoDatabase database) {
         if (instance == null) {
             synchronized (LogDAO.class) {
@@ -30,15 +35,34 @@ public class LogDAO {
         return instance;
     }
 
+    /**
+     * get the instance
+     * @return
+     */
+
     public static LogDAO getInstance() {
         return instance;
     }
 
+    /**
+     * add the history of operator
+     * @param type
+     * @param path
+     * @param url
+     * @param method
+     * @param body
+     * @param ip
+     */
     public void addLog(String type, String path, String url, String method,  String body, String ip) {
         Document post = new Document("path", path).append("url", url).append("type", type).append("method", method)
                 .append("body", body).append("ip", ip).append("date", DateUtil.now());
         logsCollection.insertOne(post);
     }
+
+    /**
+     * get the history of operator
+     * @return
+     */
 
     public List<Document> getLogs() {
         return logsCollection.find().projection(new Document("fieldName1", 1)

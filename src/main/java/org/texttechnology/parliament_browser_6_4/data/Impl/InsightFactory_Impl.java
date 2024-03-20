@@ -30,6 +30,7 @@ import static com.mongodb.client.model.Sorts.descending;
 /**
  * Implementation of the InsightFactory interface for managing user data within a MongoDB database.
  * Provides methods to query, save, update, and delete user information.
+ * @author Giuseppe Abrami
  */
 public class InsightFactory_Impl implements InsightFactory {
 
@@ -297,6 +298,10 @@ public class InsightFactory_Impl implements InsightFactory {
 
     }
 
+    /**
+     * get speech from mongoDB
+     * @return
+     */
     @Override
     public List<Speech> getSpeeches() {
         List<Speech> sList = new ArrayList<>(0);
@@ -306,6 +311,11 @@ public class InsightFactory_Impl implements InsightFactory {
         });
         return sList;
     }
+
+    /**
+     * get comments from mongoDB
+     * @return
+     */
     @Override
     public List<Comment> getComments() {
         List<Comment> cList = new ArrayList<>(0);
@@ -316,20 +326,32 @@ public class InsightFactory_Impl implements InsightFactory {
         return cList;
     }
 
+    /**
+     * find comment by given ID
+     * @param commentIdList
+     * @return
+     */
+
     @Override
     public List<Document> findByIds(List<String> commentIdList) {
         this.commentCollection = dbConnectionHandler.getCollection("comment");
         return commentCollection.find(in("_id", commentIdList)).into(new ArrayList<>());
     }
 
+    /**
+     * find speaker by given id
+     * @param commentIdList
+     * @return
+     */
+
     @Override
     public AggregateIterable<Document> findByIdsWithSpeaker(List<String> commentIdList) {
         this.commentCollection = dbConnectionHandler.getCollection("comment");
         return commentCollection.aggregate(Arrays.asList(
-                // 首先匹配符合条件的speech记录
+                // First match the eligible speech records
                 new Document("$match", in("_id", commentIdList)),
 
-                // 将speech中的speaker字段关联到speaker集合中
+                // Associate the speaker field in speech to the speaker collection
                 new Document("$lookup", new Document()
                         .append("from", "speaker")
                         .append("localField", "speaker")
@@ -337,18 +359,18 @@ public class InsightFactory_Impl implements InsightFactory {
                         .append("as", "speakerInfo")
                 ),
 
-                // 将speaker数组拆分为单独的文档
+                // Splitting the speakers array into separate documents
                 new Document("$unwind", "$speakerInfo"),
-                // 可以添加其他聚合操作，如筛选、投影等
 
-                // 最后输出结果
+
+                // output
                 new Document("$project", new Document()
                         .append("text", "$text")
                         .append("speech", "$speech")
                         .append("speakerName", "$speakerInfo.name")
                         .append("speakerId", "$speakerInfo._id")
                 ),
-                // 最后输出结果
+                // output
                 new Document("$project", new Document("title", 1)
                         .append("_id", 1)
                         .append("text", 1)
@@ -359,6 +381,12 @@ public class InsightFactory_Impl implements InsightFactory {
         ));
     }
 
+    /**
+     * set the daten of main seite
+     * @param limit
+     * @return
+     */
+
     @Override
     public List<Document> findByDateDescending(int limit) {
         this.meetingCollection = dbConnectionHandler.getCollection("meeting");
@@ -366,12 +394,24 @@ public class InsightFactory_Impl implements InsightFactory {
 
     }
 
+    /**
+     * save the new document from speaker(admin edit)
+     * @param document
+     * @return
+     */
+
     @Override
     public ObjectId save(Document document) {
         this.speakerCollection = dbConnectionHandler.getCollection("speaker");
         speakerCollection.insertOne(document);
         return document.getObjectId("_id");
     }
+
+    /**
+     * update the data from speaker
+     * @param id
+     * @param fieldMap
+     */
 
     @Override
     public void updateByFieldMap(ObjectId id, Map<String, Object> fieldMap) {
@@ -382,6 +422,12 @@ public class InsightFactory_Impl implements InsightFactory {
         speakerCollection.updateOne(query, updateDoc);
     }
 
+    /**
+     * update the data from speaekr
+     * @param id
+     * @param fieldMap
+     */
+
     @Override
     public void updateByFieldMap(String id, Map<String, Object> fieldMap) {
 
@@ -391,16 +437,27 @@ public class InsightFactory_Impl implements InsightFactory {
         speakerCollection.updateOne(query, updateDoc);
     }
 
+    /**
+     * update speech by ID
+     * @param id
+     * @param json
+     * @return
+     */
+
     @Override
     public boolean updateSpeakerById(ObjectId id, String json) {
 
         this.speakerCollection = dbConnectionHandler.getCollection("speaker");
-        Document query = new Document("_id", id); // 替换成你实际的查询条件
+        Document query = new Document("_id", id);
         Document update = new Document("$set", Document.parse(json));
         UpdateResult updateResult = speakerCollection.updateOne(query, update);
         return updateResult.getModifiedCount() > 0;
     }
 
+    /**
+     * search the speakers by given data
+     * @return
+     */
     @Override
     public List<Document> findAllSpeaker() {
 
@@ -408,6 +465,11 @@ public class InsightFactory_Impl implements InsightFactory {
         return speakerCollection.find().sort(descending("name")).into(new ArrayList<>());
     }
 
+    /**
+     * find the speaker by given id
+     * @param id
+     * @return
+     */
     @Override
     public Document findSpeakerById(String id) {
 
@@ -415,6 +477,11 @@ public class InsightFactory_Impl implements InsightFactory {
         return speakerCollection.find(eq("_id", id)).first();
     }
 
+    /**
+     * the aggregate result by speaker
+     * @param id
+     * @return
+     */
     @Override
     public Document findByIdAggregate(String id) {
 
@@ -432,6 +499,15 @@ public class InsightFactory_Impl implements InsightFactory {
         }
     }
 
+    /**
+     * search the speaker by given name ,firstname, fraction, party
+     * @param name
+     * @param firstName
+     * @param fraction
+     * @param party
+     * @return
+     */
+
     @Override
     public List<Document> searchSpeaker(String name, String firstName, String fraction, String party) {
 
@@ -442,12 +518,12 @@ public class InsightFactory_Impl implements InsightFactory {
             query.append("name", new Document("$regex", name));
         }
 
-        // 添加 firstName 参数的模糊查询条件
+        // Fuzzy query with firstName parameter
         if (firstName != null && !firstName.isEmpty()) {
             query.append("firstName", new Document("$regex", firstName));
         }
 
-        // 添加 party 参数的模糊查询条件
+        // Adding fuzzy query conditions for the party parameter
         if (party != null && !party.isEmpty()) {
             query.append("party", new Document("$regex", party));
         }
@@ -461,14 +537,18 @@ public class InsightFactory_Impl implements InsightFactory {
         return speakers;
     }
 
+    /**
+     * search the data of speech
+     * @return
+     */
     @Override
     public AggregateIterable<Document> aggregate() {
         this.speechCollection = dbConnectionHandler.getCollection("speech");
         return speechCollection.aggregate(Arrays.asList(
-                // 首先匹配符合条件的speech记录
+                // First match the eligible speech records
                 //new Document("$match", new Document("someCondition", "someValue")),
 
-                // 将speech中的speaker字段关联到speaker集合中
+                // Associate the speaker field in speech to the speaker collection
                 new Document("$lookup", new Document()
                         .append("from", "speaker")
                         .append("localField", "speaker")
@@ -476,7 +556,7 @@ public class InsightFactory_Impl implements InsightFactory {
                         .append("as", "speakerInfo")
                 ),
 
-                // 将speaker数组拆分为单独的文档
+                // Splitting the speakers array into separate documents
                 new Document("$unwind", "$speakerInfo"),
                         /*
                         new Document("$lookup", new Document()
@@ -486,9 +566,9 @@ public class InsightFactory_Impl implements InsightFactory {
                                 .append("as", "commentInfo")
                         )
                         */
-                // 可以添加其他聚合操作，如筛选、投影等
 
-                // 最后输出结果
+
+                // output
                 new Document("$project", new Document()
                         .append("title", "$protocol.title")
                         .append("date", "$protocol.date")
@@ -500,7 +580,7 @@ public class InsightFactory_Impl implements InsightFactory {
                         .append("index", "$agenda.index")
 
                 ),
-                // 最后输出结果
+                // output
                 new Document("$project", new Document("title", 1)
                         .append("date", 1)
                         .append("starttime", 1)
@@ -513,6 +593,12 @@ public class InsightFactory_Impl implements InsightFactory {
         ));
     }
 
+    /**
+     * search the speech by timefilter
+     * @param starttime
+     * @param endtime
+     * @return
+     */
     @Override
     public AggregateIterable<Document> searchSpeech(Date starttime, Date endtime) {
 
@@ -529,20 +615,31 @@ public class InsightFactory_Impl implements InsightFactory {
         return aggregateQuery(query);
     }
 
+    /**
+     * query the title of speech
+     * @param protocol
+     * @return
+     */
+
     @Override
     public AggregateIterable<Document> queryDownloadSpeeches(String protocol) {
         Document query = new Document("protocol.title", protocol);
         return downloadAggregateQuery(query);
     }
 
+    /**
+     * download the data by query
+     * @param query
+     * @return
+     */
+
     @Override
     public AggregateIterable<Document> downloadAggregateQuery(Document query) {
         this.speechCollection = dbConnectionHandler.getCollection("speech");
         return speechCollection.aggregate(Arrays.asList(
-                // 首先匹配符合条件的speech记录
                 new Document("$match", query),
 
-                // 将speech中的speaker字段关联到speaker集合中
+
                 new Document("$lookup", new Document()
                         .append("from", "speaker")
                         .append("localField", "speaker")
@@ -550,7 +647,6 @@ public class InsightFactory_Impl implements InsightFactory {
                         .append("as", "speakerInfo")
                 ),
 
-                // 将speaker数组拆分为单独的文档
                 new Document("$unwind", "$speakerInfo"),
                         /*
                         new Document("$lookup", new Document()
@@ -560,9 +656,7 @@ public class InsightFactory_Impl implements InsightFactory {
                                 .append("as", "commentInfo")
                         )
                         */
-                // 可以添加其他聚合操作，如筛选、投影等
 
-                // 最后输出结果
                 new Document("$project", new Document()
                         .append("title", "$protocol.title")
                         .append("date", "$protocol.date")
@@ -575,7 +669,7 @@ public class InsightFactory_Impl implements InsightFactory {
                         .append("text", "$text")
                         .append("comments", "$comments")
                 ),
-                // 最后输出结果
+                // output
                 new Document("$project", new Document("title", 1)
                         .append("date", 1)
                         .append("starttime", 1)
@@ -590,14 +684,20 @@ public class InsightFactory_Impl implements InsightFactory {
         ));
     }
 
+    /**
+     * aggregate search
+     * @param query
+     * @return
+     */
+
     @Override
     public AggregateIterable<Document> aggregateQuery(Document query) {
         this.speechCollection = dbConnectionHandler.getCollection("speech");
         return speechCollection.aggregate(Arrays.asList(
-                // 首先匹配符合条件的speech记录
+
                 new Document("$match", query),
 
-                // 将speech中的speaker字段关联到speaker集合中
+
                 new Document("$lookup", new Document()
                         .append("from", "speaker")
                         .append("localField", "speaker")
@@ -605,7 +705,6 @@ public class InsightFactory_Impl implements InsightFactory {
                         .append("as", "speakerInfo")
                 ),
 
-                // 将speaker数组拆分为单独的文档
                 new Document("$unwind", "$speakerInfo"),
                         /*
                         new Document("$lookup", new Document()
@@ -615,9 +714,6 @@ public class InsightFactory_Impl implements InsightFactory {
                                 .append("as", "commentInfo")
                         )
                         */
-                // 可以添加其他聚合操作，如筛选、投影等
-
-                // 最后输出结果
                 new Document("$project", new Document()
                         .append("title", "$protocol.title")
                         .append("date", "$protocol.date")
@@ -628,7 +724,7 @@ public class InsightFactory_Impl implements InsightFactory {
                         .append("speakerId", "$speakerInfo._id")
                         .append("index", "$agenda.index")
                 ),
-                // 最后输出结果
+                // output
                 new Document("$project", new Document("title", 1)
                         .append("date", 1)
                         .append("starttime", 1)
@@ -641,23 +737,36 @@ public class InsightFactory_Impl implements InsightFactory {
         ));
     }
 
+    /**
+     * update the speech(admin edit)
+     * @param id
+     * @param json
+     * @return
+     */
+
+
     @Override
     public boolean updateSpeechById(String id, String json) {
         this.speechCollection = dbConnectionHandler.getCollection("speech");
-        Document query = new Document("_id", id); // 替换成你实际的查询条件
+        Document query = new Document("_id", id);
         Document update = new Document("$set", Document.parse(json));
         UpdateResult updateResult = speechCollection.updateOne(query, update);
         return updateResult.getModifiedCount() > 0;
     }
 
+    /**
+     * find speech by given id
+     * @param id
+     * @return
+     */
     @Override
     public Document findSpeechById(String id) {
         this.speechCollection = dbConnectionHandler.getCollection("speech");
-        // 查询并投影
+
 
         Document result = speechCollection.aggregate(
                 Arrays.asList(
-                        match(eq("_id", id)), // 根据 id 进行匹配
+                        match(eq("_id", id)), // Match by id
                         new Document("$project", new Document()
                                 .append("title", "$protocol.title")
                                 .append("speaker", "$speaker")
@@ -668,7 +777,7 @@ public class InsightFactory_Impl implements InsightFactory {
                                 .append("comments", "$comments")
                                 .append("length", "$length")
                         ),
-                        // 最后输出结果
+                        // output
                         new Document("$project", new Document("_id", 1)
                                 .append("title", 1)
                                 .append("speaker", 1)
@@ -685,12 +794,23 @@ public class InsightFactory_Impl implements InsightFactory {
         return result;
     }
 
+    /**
+     * global search
+     * @param keyword
+     * @return
+     */
+
     @Override
     public AggregateIterable<Document> globalQueryByKeyword(String keyword) {
         String regexKeyword = ".*" + Pattern.quote(keyword) + ".*";
         Document query = new Document("text", new Document("$regex", regexKeyword));
         return aggregateQuery(query);
     }
+
+    /**
+     * run the nlp analyse
+     * @return
+     */
 
     @Override
     public NLPHelper getNLPHelper() {

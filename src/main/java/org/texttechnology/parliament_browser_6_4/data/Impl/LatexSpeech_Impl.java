@@ -6,6 +6,9 @@ import org.texttechnology.parliament_browser_6_4.data.Speech_mongoDB;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * implemention of LatexSpeech
+ */
 public class LatexSpeech_Impl implements LatexSpeech {
 
     private String title;
@@ -16,11 +19,20 @@ public class LatexSpeech_Impl implements LatexSpeech {
     public LatexSpeech_Impl(){
 
     }
+
+    /**
+     * get the title
+     * @return
+     */
     @Override
     public String getTitle() {
         return this.title;
     }
 
+    /**
+     * set the title
+     * @param title
+     */
     @Override
     public void setTitle(String title) {
 
@@ -28,10 +40,19 @@ public class LatexSpeech_Impl implements LatexSpeech {
 
     }
 
+    /**
+     * get the map of speech
+     * @return
+     */
     @Override
     public Map<String, List<Speech_mongoDB>> getSpeechMap() {
         return this.speechMap;
     }
+
+    /**
+     * set the map of speech
+     * @param speechMap
+     */
 
     @Override
     public void setSpeechMap(Map<String, List<Speech_mongoDB>> speechMap) {

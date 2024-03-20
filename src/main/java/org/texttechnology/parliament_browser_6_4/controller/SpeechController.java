@@ -30,6 +30,9 @@ import java.util.stream.Collectors;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
+/**
+ *  set up and manage routes for handling requests related to speeches
+ */
 public class SpeechController {
 
 
@@ -46,22 +49,27 @@ public class SpeechController {
         initializeRoutes();
     }
 
+    /**
+     * defines various routes for a web application focused on managing
+     * speeches using the Freemarker template engine for dynamic content rendering.
+     * @throws IOException
+     */
     private void initializeRoutes() throws IOException {
         get("/speech", new FreemarkerBasedRoute("/speech", "speech.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
                     throws IOException, TemplateException {
                 SessionsUtils.redirectIfNotLogin(request, response);
-                // 构建聚合查询
+                // Building Aggregate Queries
                 AggregateIterable<Document> speechList = insightFactory.aggregate();
 
                 SimpleHash root = new SimpleHash();
 
-                // 将AggregateIterable转换为List
+                // Converting an AggregateIterable to a List
                 List<Document> resultList = new ArrayList<>();
                 speechList.into(resultList);
                 System.out.println("total speech num is " + resultList.size());
-                // 转化为级联的多级菜单形式
+                // Conversion to cascading multi-level menu forms
                 Map<String, Map<String, List<Document>>> resultMap = convertCascadeMap(resultList);
 
                 root.put("speechMap", resultMap);
@@ -94,10 +102,10 @@ public class SpeechController {
                 Date startDate = new Date(speech.get("starttime", Long.class));
                 Date endDate = new Date(speech.get("endtime", Long.class));
 
-                // 创建一个SimpleDateFormat对象，指定所需的格式
+                // Create a SimpleDateFormat object that specifies the desired formatting
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
-                // 使用format方法将Date对象转换为字符串
+                // Converting a Date object to a string using the format method
                 String formattedStartDate = sdf.format(startDate);
                 String formattedEndDate = sdf.format(endDate);
 
@@ -125,7 +133,7 @@ public class SpeechController {
                 String startTime = StringEscapeUtils.escapeHtml4(request.queryParams("startTime"));
                 String endTime = StringEscapeUtils.escapeHtml4(request.queryParams("endTime"));
 
-                // 创建一个SimpleDateFormat对象，指定所需的格式
+                // Create a SimpleDateFormat object that specifies the desired formatting
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
                 Date startDate = null;
                 Date endDate = null;
@@ -151,11 +159,11 @@ public class SpeechController {
 
                 AggregateIterable<Document> speechList = insightFactory.searchSpeech(startDate, endDate);
 
-                // 将AggregateIterable转换为List
+                // Converting an AggregateIterable to a List
                 List<Document> resultList = new ArrayList<>();
                 speechList.into(resultList);
                 System.out.println("search speech num is " + resultList.size());
-                // 转化为级联的多级菜单形式
+                // Conversion to cascading multi-level menu forms
                 Map<String, Map<String, List<Document>>> resultMap = convertCascadeMap(resultList);
 
 
@@ -201,7 +209,7 @@ public class SpeechController {
             String pdfDirectory = "src/main/resources/pdf/";
             String downloadFile = null;
             try {
-                /** 查询结果并转化为LatexSpeech对象 */
+                /** Query results and transform into LatexSpeech objects */
                 String protocol = request.queryParams("protocol");
                 List<Document> speeches = insightFactory.queryDownloadSpeeches(protocol).into(new ArrayList<>());
                 Map<String, List<Document>> resultMap = convertCascadeMap(speeches).get(protocol);
@@ -221,13 +229,13 @@ public class SpeechController {
                 LatexSpeech_Impl latexSpeech = new LatexSpeech_Impl();
                 latexSpeech.setTitle(protocol);
                 latexSpeech.setSpeechMap(speechMap);
-                /** 生成pdf并回传给前端 */
+                /** Generate a pdf and pass it back to the front end */
                 LatexBuilder latexBuilder = new LatexBuilder();
                 downloadFile = latexBuilder.build(latexSpeech);
                 System.out.println("after build: " + downloadFile);
                 response.header("Content-Disposition", "attachment; " + "filename=" +  downloadFile);
                 InputStream inputStream = new FileInputStream(pdfDirectory + downloadFile);
-                // 将文件内容写入响应输出流
+                // Writes the contents of the file to the response output stream
                 OutputStream outputStream = response.raw().getOutputStream();
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -235,7 +243,7 @@ public class SpeechController {
                     outputStream.write(buffer, 0, bytesRead);
                 }
 
-                // 关闭输入流和输出流
+                // Closing the input and output streams
                 inputStream.close();
                 outputStream.close();
 
@@ -252,7 +260,7 @@ public class SpeechController {
 
 
     /**
-     * 转化为多级级联的map，用于折叠和展开显示
+     * Transforms into a multi-level cascading map for collapsing and expanding the display
      * @param resultList
      * @return Map<protocal, Map<index, List<Docuemnt>>>
      */

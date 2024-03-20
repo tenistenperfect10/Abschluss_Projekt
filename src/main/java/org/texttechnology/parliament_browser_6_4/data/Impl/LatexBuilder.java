@@ -5,6 +5,9 @@ import org.texttechnology.parliament_browser_6_4.helper.StringUtils;
 
 import java.io.*;
 
+/**
+ * Setting the contents of the latex and the output path of the file
+ */
 public class LatexBuilder {
 
     private StringBuilder latexCode;
@@ -30,6 +33,9 @@ public class LatexBuilder {
         mkdir(pdfDirectoryPath);
     }
 
+    /**
+     * set a latex
+     */
     public LatexBuilder() {
         latexCode = new StringBuilder();
 
@@ -59,6 +65,10 @@ public class LatexBuilder {
         latexCode.append("\\begin{document}\n");
     }
 
+    /**
+     * set the header of latex data
+     * @param latexSpeech
+     */
     private void makeHeader(LatexSpeech latexSpeech) {
         latexCode.append("\\title{" + latexSpeech.getTitle() + "}\n");
         // Remove Self-Date
@@ -69,6 +79,11 @@ public class LatexBuilder {
         latexCode.append("\\tableofcontents\n");
         latexCode.append("\\newpage\n");
     }
+
+    /**
+     * set the section of latex
+     * @param latexSpeech
+     */
 
     private void buildFromObject(LatexSpeech latexSpeech) {
 
@@ -93,6 +108,11 @@ public class LatexBuilder {
         latexCode.append("\\end{document}");
     }
 
+    /**
+     * content document
+     * @param latexSpeech
+     * @return
+     */
     public String build(LatexSpeech latexSpeech) {
         makeHeader(latexSpeech);
         buildFromObject(latexSpeech);
@@ -102,6 +122,11 @@ public class LatexBuilder {
         // End document content
         return filePrefix + ".pdf";
     }
+
+    /**
+     * process latex
+     * @param latexSpeech
+     */
 
     public void generateLatexFile(LatexSpeech latexSpeech) {
         // Determine the path to the LaTeX file
@@ -117,6 +142,12 @@ public class LatexBuilder {
             e.printStackTrace();
         }
     }
+
+    /**
+     * set the pdf of latex
+     * @param latexSpeech
+     * @return
+     */
 
     private String generatePdf(LatexSpeech latexSpeech) {
         String filePrefix = latexSpeech.getTitle().replaceAll(" ", "").replaceAll("/", "-").trim();
