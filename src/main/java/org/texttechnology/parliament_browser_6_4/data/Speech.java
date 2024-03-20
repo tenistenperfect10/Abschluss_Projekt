@@ -35,7 +35,7 @@ public interface Speech extends PlenaryObject {
     PlenaryProtocol getProtocol();
 
     /**
-     * Return the speaker of tis speech
+     * Return the speaker of this speech
      * @return
      */
     Speaker getSpeaker();

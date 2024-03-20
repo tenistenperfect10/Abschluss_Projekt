@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * Handling special characters in latex files that can't be converted properly
- *
+ * @author Yu Ming
  */
 public class StringUtils {
 

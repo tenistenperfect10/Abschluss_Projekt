@@ -28,6 +28,8 @@ import static spark.Spark.*;
 
 /**
  *  set up and manage routes for handling requests related to speakers
+ * @author Yu Ming
+ * @author He Liu
  */
 public class SpeakerController {
 

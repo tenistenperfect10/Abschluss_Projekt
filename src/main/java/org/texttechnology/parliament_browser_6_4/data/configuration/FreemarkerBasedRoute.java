@@ -14,6 +14,8 @@ import java.io.Writer;
 /**
  * An abstract class that extends {@link RouteImpl} to provide a route implementation
  * based on Freemarker templates for rendering HTML views.
+ * @author He Liu
+ * @author Yu Ming
  */
 public abstract class FreemarkerBasedRoute extends RouteImpl {
 

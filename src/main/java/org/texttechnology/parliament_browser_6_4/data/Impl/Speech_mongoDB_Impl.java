@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *implemention of Interface speech_mongoDB
+ * Implementation of Interface speech_mongoDB
+ * @author He Liu
+ * @author Yu Ming
  */
 public class Speech_mongoDB_Impl implements Speech_mongoDB {
     private String speaker = null;

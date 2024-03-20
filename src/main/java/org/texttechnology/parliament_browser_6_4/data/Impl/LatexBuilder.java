@@ -7,6 +7,9 @@ import java.io.*;
 
 /**
  * Setting the contents of the latex and the output path of the file
+ * @author Yu Ming
+ * @author He Liu
+ * @author Yingzhu Chen
  */
 public class LatexBuilder {
 

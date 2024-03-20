@@ -4,6 +4,9 @@ import java.util.List;
 
 /**
  * Getting the data needed to import latex from the database
+ * @author He Liu
+ * @author Yu Ming
+ * @author Yingzhu Chen
  */
 public interface Speech_mongoDB {
     /**

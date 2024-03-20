@@ -8,6 +8,8 @@ import spark.Session;
  * This class provides static methods to assist with session management, such as
  * redirecting users who are not logged in to the login page and retrieving session
  * attributes by key.
+ * @author He Liu
+ * @author Yu Ming
  */
 
 public class SessionsUtils {

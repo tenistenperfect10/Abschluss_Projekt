@@ -20,6 +20,8 @@ import static spark.Spark.get;
 
 /**
  * Initialising the page
+ * @author Yu Ming
+ * @author He Liu
  */
 public class MeetingController {
 
