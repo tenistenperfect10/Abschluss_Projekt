@@ -32,6 +32,8 @@ import static spark.Spark.post;
 
 /**
  *  set up and manage routes for handling requests related to speeches
+ * @author He Liu
+ * @author Yu Ming
  */
 public class SpeechController {
 

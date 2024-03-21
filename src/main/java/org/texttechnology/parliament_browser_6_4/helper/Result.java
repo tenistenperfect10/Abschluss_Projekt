@@ -7,6 +7,8 @@ import cn.hutool.json.JSONUtil;
  * This includes status code, message, data, and a success flag to indicate the operation's outcome.
  *
  * @param <T> The type of the data field, allowing for flexibility in what can be returned.
+ * @author He Liu
+ * @author Yu Ming
  */
 public class Result<T>{
 

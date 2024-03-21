@@ -5,6 +5,8 @@ import org.texttechnology.parliament_browser_6_4.data.User;
 /**
  * Represents a user within the system, encapsulating user-related information
  * such as username, password, user type, and edit permissions.
+ * @author Yu Ming
+ * @author He Liu
  */
 public class User_Impl implements User {
 

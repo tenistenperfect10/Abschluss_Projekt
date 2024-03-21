@@ -8,6 +8,9 @@ import java.util.Map;
 
 /**
  * implemention of LatexSpeech
+ * @author He Liu
+ * @author Yu Ming
+ * @author Yingzhu Chen
  */
 public class LatexSpeech_Impl implements LatexSpeech {
 

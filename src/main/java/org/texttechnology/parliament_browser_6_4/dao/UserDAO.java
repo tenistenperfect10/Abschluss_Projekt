@@ -16,7 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * the user editer
+ * Data Access Object class for managing user data stored in a MongoDB collection.
+ * This class provides methods for querying, saving, updating, and deleting user information.
+ * @author He Liu
+ * @author Yu Ming
  */
 public class UserDAO {
 

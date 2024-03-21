@@ -10,6 +10,12 @@ import java.util.List;
 
 import static com.mongodb.client.model.Sorts.descending;
 
+/**
+ * Data Access Object class for managing logs stored in a MongoDB collection.
+ * This class provides methods for adding and retrieving log entries.
+ * @author He Liu
+ * @author Yu Ming
+ */
 public class LogDAO {
     private final MongoCollection<Document> logsCollection;
 

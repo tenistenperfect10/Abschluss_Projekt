@@ -4,6 +4,9 @@ import java.io.*;
 
 /**
  * Methods for compiling latex
+ * @author He Liu
+ * @author Yu Ming
+ * @author Yingzhu Chen
  */
 public class LatexCompiler {
     /**

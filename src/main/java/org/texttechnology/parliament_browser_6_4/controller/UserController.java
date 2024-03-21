@@ -25,6 +25,8 @@ import static spark.Spark.post;
 
 /**
  * manage users and admins
+ * @author Yu Ming
+ * @author He Liu
  */
 public class UserController {
 

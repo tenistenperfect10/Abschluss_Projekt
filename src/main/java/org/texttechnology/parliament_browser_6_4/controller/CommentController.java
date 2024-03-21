@@ -8,6 +8,8 @@ import java.io.IOException;
 
 /**
  *  set up and manage routes for handling requests related to comments
+ * @author Yu Ming
+ * @author He Liu
  */
 public class CommentController {
 

@@ -42,6 +42,8 @@ import static com.mongodb.client.model.Filters.eq;
 
 /**
  * Processing the NLP-Analyse
+ * @author Yu Ming
+ * @author Yingzhu Chen
  */
 public class NLPHelper {
 

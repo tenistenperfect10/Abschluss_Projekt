@@ -16,6 +16,8 @@ import static spark.Spark.post;
 
 /**
  *  set up and manage routes for handling requests related to log
+ * @author Yu Ming
+ * @author He Liu
  */
 public class LogController {
 

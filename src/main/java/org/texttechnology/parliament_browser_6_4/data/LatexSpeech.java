@@ -5,6 +5,9 @@ import java.util.Map;
 
 /**
  * Setting the data to be imported into the latex file
+ * @author He Liu
+ * @author Yu Ming
+ * @author Yizhu Chen
  */
 public interface LatexSpeech {
     /**

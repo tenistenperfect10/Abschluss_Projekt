@@ -35,7 +35,6 @@ public class Launch {
     public Launch() throws Exception {
         String pTarget = Launch.class.getClassLoader().getResource("Project_06_04.txt").getPath();
         pTarget = URLDecoder.decode(pTarget, StandardCharsets.UTF_8);
-        System.out.println(pTarget);
         MongoDBConfig dbConfigTarget = new MongoDBConfig(pTarget);
         MongoDBConnectionHandler mongoDBConnectionHandler = new MongoDBConnectionHandler(dbConfigTarget);
         MongoDatabase mongoDatabase = mongoDBConnectionHandler.getDatabase();

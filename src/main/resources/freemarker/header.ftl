@@ -1,3 +1,4 @@
+<!-- Authors: He Liu, Yu Ming -->
 <a href="/speaker">speaker</a> | <a href="/speech">speech</a> | <a href="/logout">logout</a> | <button onclick="toggleAndFetch()"> logs </button>
 <#--<link rel="stylesheet" href="/font-awasome.min.css">-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
