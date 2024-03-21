@@ -18,6 +18,8 @@ import java.util.List;
 /**
  * A parser class for processing and parsing member data from external sources into Member objects,
  * and for syncing image data with these member entities.
+ * @author He Liu
+ * @author Yingzhu Chen
  */
 public class MdbParser {
     /**

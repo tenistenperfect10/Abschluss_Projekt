@@ -10,9 +10,12 @@ import java.util.List;
 
 import static com.mongodb.client.model.Sorts.descending;
 
+
 /**
- * Data Access Object class for managing logs stored in a MongoDB collection.
- * This class provides methods for adding and retrieving log entries.
+ * The {@code LogDAO} class is a Data Access Object (DAO) responsible for managing log entries
+ * in a MongoDB collection. It provides functionality to add new log entries and to retrieve existing log entries.
+ * This class utilizes a singleton pattern to ensure that only one instance manages the log entries throughout the application.
+ *
  * @author He Liu
  * @author Yu Ming
  */
@@ -42,22 +45,24 @@ public class LogDAO {
     }
 
     /**
-     * get the instance
-     * @return
+     * A volatile instance of LogDAO to ensure thread-safe singleton instantiation.
      */
-
     public static LogDAO getInstance() {
         return instance;
     }
 
+
     /**
-     * add the history of operator
-     * @param type
-     * @param path
-     * @param url
-     * @param method
-     * @param body
-     * @param ip
+     * Adds a log entry to the logs collection. Each log entry contains information
+     * such as the type of operation, the path, URL, method, request body, IP address of the requester,
+     * and the timestamp of when the log was created.
+     *
+     * @param type The type of operation performed.
+     * @param path The path accessed in the operation.
+     * @param url The full URL accessed.
+     * @param method The HTTP method used.
+     * @param body The body of the request.
+     * @param ip The IP address of the requester.
      */
     public void addLog(String type, String path, String url, String method,  String body, String ip) {
         Document post = new Document("path", path).append("url", url).append("type", type).append("method", method)
@@ -66,10 +71,11 @@ public class LogDAO {
     }
 
     /**
-     * get the history of operator
-     * @return
+     * Retrieves the latest 20 log entries from the logs collection, sorted in descending order by the document ID.
+     * This method projects specific fields from the log entries to be included in the result set.
+     *
+     * @return A list of documents representing the latest 20 log entries.
      */
-
     public List<Document> getLogs() {
         return logsCollection.find().projection(new Document("fieldName1", 1)
                 .append("_id", 1)

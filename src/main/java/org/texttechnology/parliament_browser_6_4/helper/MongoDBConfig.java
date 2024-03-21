@@ -7,6 +7,7 @@ import java.util.Properties;
  * A class that extends {@link java.util.Properties} to manage MongoDB configuration.
  * This class allows loading MongoDB configuration parameters such as hostname, username,
  * password, port, database name, and collection name from a properties file.
+ * @author Giuseppe Abrami
  */
 public class MongoDBConfig extends Properties {
     /**

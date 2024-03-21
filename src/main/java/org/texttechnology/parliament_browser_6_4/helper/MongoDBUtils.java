@@ -18,6 +18,8 @@ import java.util.Properties;
  * for connecting to a MongoDB database, accessing or creating collections, listing collection names,
  * and inserting documents into a collection. The class automatically establishes a connection
  * with the database upon loading, based on properties specified in a configuration file.
+ * @author Yingzhu Chen
+ * @author He Liu
  */
 public class MongoDBUtils {
 

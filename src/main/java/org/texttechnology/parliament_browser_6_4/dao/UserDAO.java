@@ -16,8 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Data Access Object class for managing user data stored in a MongoDB collection.
- * This class provides methods for querying, saving, updating, and deleting user information.
+ * The {@code UserDAO} class is responsible for interacting with the MongoDB collection that stores user information.
+ * It provides functionality to query, save, update, and delete users in the database. This class is utilized by
+ * the application to perform operations related to user management.
+ *
  * @author He Liu
  * @author Yu Ming
  */
@@ -25,22 +27,30 @@ public class UserDAO {
 
     private final MongoCollection<Document> userCollection;
 
+    /**
+     * Constructs a UserDAO instance with a connection to the MongoDB database.
+     *
+     * @param database The MongoDB database instance.
+     */
     public UserDAO(final MongoDatabase database) {
         userCollection = database.getCollection("user");
     }
 
     /**
-     * query the user
-     * @param username
-     * @return
+     * Queries the database for a user with the specified username.
+     *
+     * @param username The username to query.
+     * @return A {@link Document} representing the user, or null if the user does not exist.
      */
     public Document queryExistUser(String username) {
         return userCollection.find(new Document("username", username)).first();
     }
 
+
     /**
-     * find the regular user
-     * @return
+     * Retrieves all regular users (non-admins) from the database.
+     *
+     * @return A list of {@link Document} objects representing the regular users.
      */
 
     public List<Document> findAllRegularUsers() {
@@ -48,8 +58,9 @@ public class UserDAO {
     }
 
     /**
-     * save the new user
-     * @param user
+     * Saves a new user to the database.
+     *
+     * @param user The {@link User_Impl} object representing the user to save.
      */
     public void saveUser(User_Impl user) {
         Document document = Document.parse(JSONUtil.toJsonStr(user));
@@ -57,11 +68,11 @@ public class UserDAO {
     }
 
     /**
-     * by given id and the password find the user
-     * @param user
-     * @return
+     * Checks if the provided user credentials match a user in the database.
+     *
+     * @param user The {@link User_Impl} object containing the username and password to match.
+     * @return True if a matching user is found, false otherwise.
      */
-
     public boolean matchUser(User_Impl user) {
         Document queryUser = userCollection.find(new Document("username", user.getUsername())).first();
         if (queryUser.getString("password").equals(user.getPassword())) {
@@ -71,9 +82,10 @@ public class UserDAO {
     }
 
     /**
-     * update the password
-     * @param user
-     * @return
+     * Updates the password for the user with the given username.
+     *
+     * @param user The {@link User_Impl} object containing the username and the new password.
+     * @return True if the update was successful, false otherwise.
      */
 
     public boolean updateUserPwd(User_Impl user) {
@@ -82,9 +94,10 @@ public class UserDAO {
     }
 
     /**
-     * update the premissin of user
-     * @param user
-     * @return
+     * Updates the user permission for the user with the given username.
+     *
+     * @param user The {@link User_Impl} object containing the username and the new permission level.
+     * @return True if the update was successful, false otherwise.
      */
     public boolean updateUserPermission(User_Impl user) {
         UpdateResult updateResult = userCollection.updateOne(Filters.eq("username", user.getUsername()), Updates.set("canEdit", user.getCanEdit()));
@@ -92,9 +105,10 @@ public class UserDAO {
     }
 
     /**
-     * delete user
-     * @param username
-     * @return
+     * Deletes the user with the specified username from the database.
+     *
+     * @param username The username of the user to delete.
+     * @return True if the deletion was successful, false otherwise.
      */
     public boolean deleteUserByUsername(String username) {
         DeleteResult result = userCollection.deleteOne(new Document("username", username));

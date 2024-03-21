@@ -8,11 +8,12 @@ import java.io.File;
 /**
  * A utility class providing methods for working with XML files,
  * specifically for converting XML files into Document objects.
+ * @author He Liu
+ * @author Yingzhu Chen
  */
 public class XMLUtils {
     /**
      * Parses the XML file specified by the filePath into a Document object.
-     *
      * This method uses the DocumentBuilderFactory and DocumentBuilder classes
      * from the javax.xml.parsers package to parse the XML file. It handles
      * the necessary exceptions and returns null if parsing fails for any reason,

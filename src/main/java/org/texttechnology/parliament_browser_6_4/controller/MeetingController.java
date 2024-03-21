@@ -19,7 +19,14 @@ import java.util.List;
 import static spark.Spark.get;
 
 /**
- * Initialising the page
+ * This class is responsible for initializing the page and setting up web routes for handling HTTP requests.
+ * It utilizes the Freemarker template engine for rendering views. The class collaborates with {@link InsightFactory}
+ * for accessing and manipulating insight data, {@link UserDAO} for user-related data access, and Freemarker's
+ * {@link Configuration} for configuring template engine settings.
+ *
+ * The routes include the application's home page, user center redirection based on user type, a route for handling
+ * "data not found" errors, and a redirection to the Swagger API documentation.
+ *
  * @author Yu Ming
  * @author He Liu
  */
@@ -29,7 +36,15 @@ public class MeetingController {
 
     private final UserDAO userDAO;
     private final Configuration cfg;
-
+    /**
+     * Constructs a MeetingController with specified {@link InsightFactory}, {@link UserDAO}, and {@link Configuration}.
+     * This constructor also initializes web routes for handling HTTP requests.
+     *
+     * @param insightFactory the InsightFactory instance used for data manipulation and access
+     * @param userDAO the UserDAO instance used for accessing user data
+     * @param cfg the Configuration instance used for template engine settings
+     * @throws IOException if an input or output exception occurs
+     */
     public MeetingController(InsightFactory insightFactory, UserDAO userDAO, Configuration cfg)
             throws IOException {
         this.insightFactory = insightFactory;
@@ -39,11 +54,14 @@ public class MeetingController {
         initializeRoutes();
     }
 
-    /**
-     * sets up web routes for handling HTTP requests using the Freemarker template engine
-     * @throws IOException
-     */
 
+    /**
+     * Initializes web routes for the application, utilizing Freemarker-based routes for rendering HTML views.
+     * It includes routes for the application's home page, login redirection, user type based redirection,
+     * a generic error page for data not found scenarios, and a route for redirecting to Swagger API documentation.
+     *
+     * @throws IOException if an input or output exception occurs
+     */
     private void initializeRoutes() throws IOException {
 
         get("/", new FreemarkerBasedRoute("/", "index.ftl", cfg) {

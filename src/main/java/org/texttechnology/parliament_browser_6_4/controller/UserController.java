@@ -24,7 +24,10 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 
 /**
- * manage users and admins
+ * The UserController class manages the web application's user and admin functionalities,
+ * including login, registration, password management, user session management, and user rights management.
+ * It utilizes Freemarker for rendering HTML views and interfaces with a UserDAO for database operations.
+ *
  * @author Yu Ming
  * @author He Liu
  */
@@ -32,7 +35,14 @@ public class UserController {
 
     private final UserDAO userDAO;
     private final Configuration cfg;
-
+    /**
+     * Initializes a new instance of the UserController class with the specified UserDAO and Configuration.
+     * It sets up the necessary web routes for user management functionalities.
+     *
+     * @param userDAO The UserDAO for interacting with the user database.
+     * @param cfg The Configuration for the Freemarker template engine.
+     * @throws IOException If an I/O error occurs.
+     */
     public UserController(UserDAO userDAO, Configuration cfg)
             throws IOException {
         this.userDAO = userDAO;
@@ -41,8 +51,11 @@ public class UserController {
     }
 
     /**
-     * Functions for user login and rights management are set up.
-     * @throws IOException
+     * Sets up web routes for various user management functionalities, including user login, registration,
+     * password updates, and session management. This method defines routes for both form display and API endpoints
+     * for submitting user data.
+     *
+     * @throws IOException If an I/O error occurs during route setup.
      */
     private void initializeRoutes() throws IOException {
         get("/login", new FreemarkerBasedRoute("/login", "login.ftl", cfg) {

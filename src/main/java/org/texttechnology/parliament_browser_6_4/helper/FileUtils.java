@@ -9,6 +9,8 @@ import java.util.zip.ZipOutputStream;
 /**
  * Provides utility methods for handling files, including zipping and unzipping files,
  * deleting directories, and managing properties files.
+ * @author Yingzhu Chen
+ * @author He Liu
  */
 public class FileUtils {
 

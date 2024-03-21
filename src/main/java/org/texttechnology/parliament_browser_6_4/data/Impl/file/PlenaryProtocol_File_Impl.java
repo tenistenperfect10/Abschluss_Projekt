@@ -226,7 +226,7 @@ public class PlenaryProtocol_File_Impl extends PlenaryObject_File_Impl implement
      * @return
      */
     private Node getNodeFromXML(Document pDocument, String sTag){
-        return pDocument.getElementsByTagName(sTag).item(0);//不创建方法 直接用这个函数
+        return pDocument.getElementsByTagName(sTag).item(0);
     }
 
     @Override

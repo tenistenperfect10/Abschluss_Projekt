@@ -36,6 +36,14 @@ public class SpeakerController {
     private final InsightFactory insightFactory;
     private final Configuration cfg;
 
+    /**
+     * Constructs a SpeakerController with specified {@link InsightFactory} and {@link Configuration}.
+     * Initializes web routes for handling speaker-related HTTP requests using the Freemarker template engine.
+     *
+     * @param insightFactory the InsightFactory instance used for data manipulation and access
+     * @param cfg the Configuration instance used for template engine settings
+     * @throws IOException if an input or output exception occurs
+     */
     public SpeakerController(InsightFactory insightFactory, Configuration cfg)
             throws IOException {
         this.insightFactory = insightFactory;
@@ -44,19 +52,20 @@ public class SpeakerController {
     }
 
     /**
-     *  defines route handlers for a web application managing speakers,
-     *  using the Freemarker template engine for rendering views.
-     * @throws IOException
+     * Defines route handlers for a web application managing speakers, utilizing the Freemarker template engine
+     * for rendering views. Routes include viewing all speakers, speaker details, searching for speakers, and saving speaker data.
+     *
+     * @throws IOException if an input or output exception occurs
      */
     private void initializeRoutes() throws IOException {
-
+        // Before-filter for all speaker routes to ensure user is logged in
         before("/speaker/*", (request, response) -> {
             Session session = request.session();
             if (session.attribute("username") == null) {
                 response.redirect("/login");
             }
         });
-
+        // Route for displaying all speakers
         get("/speaker", new FreemarkerBasedRoute("/speaker", "speaker.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
@@ -76,7 +85,7 @@ public class SpeakerController {
                 this.getTemplate().process(root, writer);
             }
         });
-
+        // Route for displaying speaker details
         get("/speakerDetail/:id", new FreemarkerBasedRoute("/speakerDetail/:id", "speakerDetail.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
@@ -94,7 +103,7 @@ public class SpeakerController {
                 this.getTemplate().process(root, writer);
             }
         });
-
+        // Route for searching speakers
         post("/speaker/search", new FreemarkerBasedRoute("/speaker", "speaker.ftl", cfg) {
             @Override
             protected void doHandle(Request request, Response response, Writer writer)
@@ -124,7 +133,7 @@ public class SpeakerController {
                 this.getTemplate().process(root, writer);
             }
         });
-
+        // API route for saving speaker data
         post("/api/speaker/save", (request, response) -> {
             response.type("application/json");
             try {

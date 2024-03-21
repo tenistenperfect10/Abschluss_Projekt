@@ -139,7 +139,7 @@ public class LatexBuilder {
         // Writing LaTeX code to a file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
             writer.write(latexCode.toString());
-            System.out.println("LaTeX code successfully written to file：" + outputFilePath);
+            System.out.println("LaTeX code successfully written to file:" + outputFilePath);
         } catch (IOException e) {
             System.out.println("An error occurs when writing LaTeX code:" + e.getMessage());
             e.printStackTrace();
@@ -178,7 +178,7 @@ public class LatexBuilder {
             // Waiting for the pdflatex process to finish
             int exitCode = process.waitFor();
             if (exitCode == 0) {
-                System.out.println("PDF ：" + latexSpeech.getTitle() + "Generated successfully");
+                System.out.println("PDF:" + latexSpeech.getTitle() + "Generated successfully");
                 // Move PDF files to a specified directory
                 File sourcePdfFile = new File("src/main/resources/latex/" + filePrefix + ".pdf");
                 File targetPdfFile = new File(pdfDirectoryPath, filePrefix + ".pdf");
@@ -186,9 +186,9 @@ public class LatexBuilder {
                 if (targetPdfFile.exists()) {
                     boolean deleted = targetPdfFile.delete();
                     if (deleted) {
-                        System.out.println("Deleted target PDF file：" + targetPdfFile.getAbsolutePath());
+                        System.out.println("Deleted target PDF file:" + targetPdfFile.getAbsolutePath());
                     } else {
-                        System.out.println("Unable to delete target PDF file：" + targetPdfFile.getAbsolutePath());
+                        System.out.println("Unable to delete target PDF file:"+ targetPdfFile.getAbsolutePath());
                         return filePrefix;
                     }
                 }

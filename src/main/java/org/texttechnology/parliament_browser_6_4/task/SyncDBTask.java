@@ -16,6 +16,8 @@ import java.io.IOException;
 /**
  * A task class for synchronizing the data from an XML file to a MongoDB database.
  * It involves unzipping the XML data file and parsing each member's data to be stored in the database.
+ * @author He Liu
+ * @author Yingzhu Chen
  */
 
 public class SyncDBTask {

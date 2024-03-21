@@ -31,7 +31,11 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 
 /**
- *  set up and manage routes for handling requests related to speeches
+ * The SpeechController class is responsible for setting up and managing routes for handling requests related to speeches
+ * in the Parliament Browser application. This includes displaying speech lists, speech details, performing speech searches,
+ * updating speech records, and generating downloads for speech documents. It utilizes the Freemarker template engine
+ * for rendering views and integrates various data handling and transformation operations.
+ *
  * @author He Liu
  * @author Yu Ming
  */
@@ -42,7 +46,14 @@ public class SpeechController {
     private final Configuration cfg;
 
     private final InsightFactory insightFactory;
-
+    /**
+     * Constructs a SpeechController with specified {@link Configuration} and {@link InsightFactory}.
+     * Initializes routes for handling HTTP requests related to speeches.
+     *
+     * @param cfg the Configuration instance for template engine settings
+     * @param insightFactory the InsightFactory instance for data manipulation and access
+     * @throws IOException if an input or output exception occurs
+     */
     public SpeechController(Configuration cfg, InsightFactory insightFactory)
             throws IOException {
 
@@ -52,9 +63,11 @@ public class SpeechController {
     }
 
     /**
-     * defines various routes for a web application focused on managing
-     * speeches using the Freemarker template engine for dynamic content rendering.
-     * @throws IOException
+     * Defines various routes for a web application focused on managing speeches, using the Freemarker template engine
+     * for dynamic content rendering. This includes routes for displaying speech lists, details, search functionality,
+     * speech updates, and downloads.
+     *
+     * @throws IOException if an input or output exception occurs
      */
     private void initializeRoutes() throws IOException {
         get("/speech", new FreemarkerBasedRoute("/speech", "speech.ftl", cfg) {
@@ -262,9 +275,12 @@ public class SpeechController {
 
 
     /**
-     * Transforms into a multi-level cascading map for collapsing and expanding the display
-     * @param resultList
-     * @return Map<protocal, Map<index, List<Docuemnt>>>
+     * Transforms a list of Document objects into a multi-level cascading map suitable for collapsing and expanding the display
+     * in the UI. This structure organizes speeches by protocol and index, facilitating the grouping of speeches under specific
+     * headings and subheadings for easier navigation and interaction.
+     *
+     * @param resultList the list of Document objects representing speech records
+     * @return a cascading map organized by protocol and index, grouping speeches accordingly
      */
     private Map<String, Map<String, List<Document>>> convertCascadeMap(List<Document> resultList) {
         Map<String, Map<String, List<Document>>> resultMap = new HashMap<>();

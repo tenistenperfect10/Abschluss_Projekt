@@ -1,3 +1,4 @@
+
 package org.texttechnology.parliament_browser_6_4.task;
 
 import org.jsoup.Jsoup;
@@ -21,6 +22,8 @@ import static org.texttechnology.parliament_browser_6_4.helper.FileUtils.storePr
 /**
  * Handles the tasks of downloading, unzipping, and organizing data related to parliamentary speeches and documents.
  * This includes managing directories, downloading DTDs and ZIP files, parsing URLs, and synchronizing XML data.
+ * @author He Liu
+ * @author Yingzhu Chen
  */
 public class DownloadTask {
 

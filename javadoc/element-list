@@ -1,0 +1,12 @@
+org.texttechnology.parliament_browser_6_4
+org.texttechnology.parliament_browser_6_4.controller
+org.texttechnology.parliament_browser_6_4.dao
+org.texttechnology.parliament_browser_6_4.data
+org.texttechnology.parliament_browser_6_4.data.configuration
+org.texttechnology.parliament_browser_6_4.data.Impl
+org.texttechnology.parliament_browser_6_4.data.Impl.file
+org.texttechnology.parliament_browser_6_4.data.Impl.mongodb
+org.texttechnology.parliament_browser_6_4.exception
+org.texttechnology.parliament_browser_6_4.helper
+org.texttechnology.parliament_browser_6_4.task
+org.texttechnology.parliament_browser_6_4.task.parser

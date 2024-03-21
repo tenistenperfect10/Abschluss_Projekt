@@ -6,6 +6,8 @@ import java.net.URL;
 /**
  * A utility class for handling HTTP requests, including setting up connections, processing requests and responses,
  * and downloading files from specified URLs.
+ * @author Yingzhu Chen
+ * @author He Liu
  */
 public class HttpRequestUtils {
 
