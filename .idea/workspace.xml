@@ -8,8 +8,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2a5a0352-c1fc-4577-97bb-f6fe21fc8e10" name="Changes" comment="Merge remote-tracking branch 'origin/main'">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-159.aux" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-159.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-159.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-159.tex" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-159.toc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-81.aux" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-81.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-81.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-81.tex" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/latex/Plenarprotokoll19-81.toc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pdf/Plenarprotokoll19-159.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pdf/Plenarprotokoll19-81.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_15_38_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_15_38__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_16_21_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_16_21__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_17_05_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_17_05__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_21_03_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024_3_14_21_03__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diagram&amp;Video/Gntt Dia.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/Impl/LatexBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/data/Impl/LatexBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/exception/InputException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/exception/InputException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/FileUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/FileUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/HttpRequestUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/HttpRequestUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/MongoDBConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/MongoDBConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/MongoDBUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/MongoDBUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/StringHelper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/StringHelper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/XMLUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/helper/XMLUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/DownloadTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/DownloadTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/SyncDBTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/SyncDBTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/parser/MdbParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/texttechnology/parliament_browser_6_4/task/parser/MdbParser.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,6 +282,7 @@
       <workItem from="1710963227769" duration="7256000" />
       <workItem from="1711016780153" duration="8749000" />
       <workItem from="1711026481979" duration="1670000" />
+      <workItem from="1711120210666" duration="1049000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote-tracking branch 'origin/main'">
       <created>1710267984584</created>
